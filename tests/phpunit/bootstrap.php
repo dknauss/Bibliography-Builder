@@ -13,6 +13,7 @@ $GLOBALS['bibliography_builder_test_password_posts']  = array();
 $GLOBALS['bibliography_builder_test_registered_block_types'] = array();
 $GLOBALS['bibliography_builder_test_registered_scripts'] = array();
 $GLOBALS['bibliography_builder_test_enqueued_scripts']   = array();
+$GLOBALS['bibliography_builder_test_added_actions']      = array();
 
 function bibliography_builder_test_reset_state() {
 	$GLOBALS['bibliography_builder_test_posts']           = array();
@@ -50,7 +51,16 @@ function bibliography_builder_test_set_current_user( $user_id ) {
 	$GLOBALS['bibliography_builder_test_current_user_id'] = $user_id;
 }
 
-function add_action() {}
+function add_action( $hook_name = '', $callback = null, $priority = 10, $accepted_args = 1 ) {
+	$GLOBALS['bibliography_builder_test_added_actions'][] = array(
+		'hook_name'     => $hook_name,
+		'callback'      => $callback,
+		'priority'      => $priority,
+		'accepted_args' => $accepted_args,
+	);
+
+	return true;
+}
 
 function add_filter() {}
 

@@ -43,12 +43,33 @@ final class A11yIntegrationTest extends TestCase {
 		$this->assertSame( 'heading_missing', $registry->checks[1]['check_name'] );
 		$this->assertSame( 'warning', $registry->checks[1]['args']['type'] );
 		$this->assertSame( 'accessibility', $registry->checks[1]['args']['category'] );
+		$this->assertNotEmpty( $registry->checks[1]['args']['error_msg'] );
+		$this->assertSame(
+			$registry->checks[1]['args']['error_msg'],
+			$registry->checks[1]['args']['warning_msg']
+		);
 	}
 
 	public function test_enqueue_a11y_validation_is_noop_when_bac_script_is_absent(): void {
 		bibliography_builder_enqueue_a11y_validation();
 
 		$this->assertSame( array(), $GLOBALS['bibliography_builder_test_enqueued_scripts'] );
+	}
+
+	public function test_enqueue_a11y_validation_runs_after_bac_enqueues_assets(): void {
+		$matching_actions = array_filter(
+			$GLOBALS['bibliography_builder_test_added_actions'],
+			static function ( $action ) {
+				return 'enqueue_block_editor_assets' === $action['hook_name']
+					&& 'bibliography_builder_enqueue_a11y_validation' === $action['callback'];
+			}
+		);
+
+		$this->assertNotEmpty( $matching_actions );
+
+		$action = array_values( $matching_actions )[0];
+
+		$this->assertGreaterThan( 10, $action['priority'] );
 	}
 
 	public function test_enqueue_a11y_validation_is_noop_when_asset_file_is_missing(): void {
