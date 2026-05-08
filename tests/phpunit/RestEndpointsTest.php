@@ -52,11 +52,19 @@ final class RestEndpointsTest extends TestCase {
 		bibliography_builder_register_rest_routes();
 		$routes = $GLOBALS['bibliography_builder_test_rest_routes'];
 
-		$this->assertCount( 3, $routes );
+		$this->assertCount( 4, $routes );
 		$this->assertSame( 'bibliography/v1', $routes[0]['namespace'] );
 		$this->assertSame( '/format', $routes[0]['route'] );
-		$this->assertSame( '/posts/(?P<post_id>\d+)/bibliographies', $routes[1]['route'] );
-		$this->assertSame( '/posts/(?P<post_id>\d+)/bibliographies/(?P<index>\d+)', $routes[2]['route'] );
+		$this->assertSame( '/pmid/(?P<pmid>\d{1,8})', $routes[1]['route'] );
+		$this->assertSame( '/posts/(?P<post_id>\d+)/bibliographies', $routes[2]['route'] );
+		$this->assertSame( '/posts/(?P<post_id>\d+)/bibliographies/(?P<index>\d+)', $routes[3]['route'] );
+		$this->assertSame( 'bibliography_builder_rest_pmid_permissions_check', $routes[1]['args']['permission_callback'] );
+
+		$pmid_arg = $routes[1]['args']['args']['pmid'];
+		$this->assertSame( '26673779', $pmid_arg['sanitize_callback']( 'PMID: 26-673779' ) );
+		$this->assertTrue( $pmid_arg['validate_callback']( '26673779' ) );
+		$this->assertFalse( $pmid_arg['validate_callback']( '123456789' ) );
+		$this->assertFalse( $pmid_arg['validate_callback']( array( '26673779' ) ) );
 	}
 
 	public function test_published_posts_are_publicly_readable(): void {
@@ -145,11 +153,76 @@ final class RestEndpointsTest extends TestCase {
 		$this->assertStringNotContainsString( '<script>', $data['entries'][0]['text'] );
 	}
 
+	public function test_pmid_endpoint_requires_editor_capability(): void {
+		$forbidden = bibliography_builder_rest_pmid_permissions_check();
+
+		$this->assertInstanceOf( WP_Error::class, $forbidden );
+		$this->assertSame( 'bibliography_builder_pmid_forbidden', $forbidden->get_error_code() );
+		$this->assertSame( 403, $forbidden->get_error_data()['status'] );
+
+		bibliography_builder_test_grant_cap( 7, 'edit_posts', 0 );
+		bibliography_builder_test_set_current_user( 7 );
+
+		$this->assertTrue( bibliography_builder_rest_pmid_permissions_check() );
+	}
+
+	public function test_pmid_endpoint_returns_csl_json_from_ncbi(): void {
+		bibliography_builder_test_grant_cap( 7, 'edit_posts', 0 );
+		bibliography_builder_test_set_current_user( 7 );
+		bibliography_builder_test_set_http_response(
+			array(
+				'response' => array( 'code' => 200 ),
+				'body'     => wp_json_encode(
+					array(
+						'id'    => 'pmid:26673779',
+						'type'  => 'article-journal',
+						'title' => 'CRISPR-Cas9 for medical genetic screens: applications and future perspectives',
+					)
+				),
+			)
+		);
+
+		$request         = new WP_REST_Request( 'GET', '/bibliography/v1/pmid/26673779' );
+		$request['pmid'] = '26673779';
+
+		$response = bibliography_builder_rest_resolve_pmid( $request );
+		$data     = $response->get_data();
+		$requests = bibliography_builder_test_get_http_requests();
+
+		$this->assertSame( 'pmid:26673779', $data['id'] );
+		$this->assertSame(
+			'CRISPR-Cas9 for medical genetic screens: applications and future perspectives',
+			$data['title']
+		);
+		$this->assertCount( 1, $requests );
+		$this->assertStringContainsString( 'format=csl', $requests[0]['url'] );
+		$this->assertStringContainsString( 'id=26673779', $requests[0]['url'] );
+		$this->assertSame( 3, $requests[0]['args']['redirection'] );
+		$this->assertArrayNotHasKey( 'headers', $requests[0]['args'] );
+	}
+
 	public function test_formatter_endpoint_supports_all_registered_styles(): void {
 		bibliography_builder_test_grant_cap( 7, 'edit_posts', 0 );
 		bibliography_builder_test_set_current_user( 7 );
 
-		foreach ( array_keys( bibliography_builder_get_formatter_style_definitions() ) as $style_key ) {
+		$style_keys = array_keys( bibliography_builder_get_formatter_style_definitions() );
+
+		$this->assertSame(
+			array(
+				'chicago-notes-bibliography',
+				'chicago-author-date',
+				'apa-7',
+				'mla-9',
+				'harvard',
+				'ieee',
+				'vancouver',
+				'oscola',
+				'abnt',
+			),
+			$style_keys
+		);
+
+		foreach ( $style_keys as $style_key ) {
 			$request = new WP_REST_Request( 'POST', '/bibliography/v1/format' );
 			$request->set_body_params(
 				array(

@@ -8,6 +8,7 @@
 import { Cite } from '@citation-js/core';
 import '@citation-js/plugin-doi';
 import '@citation-js/plugin-bibtex';
+import apiFetch from '@wordpress/api-fetch';
 import { createCitationId } from './citation-id';
 import { validateAndSanitizeCsl } from './csl-sanitize';
 import { DEFAULT_CITATION_STYLE } from './formatting';
@@ -20,6 +21,7 @@ const BIBTEX_REGEX = /@\w+\{/;
 const PMID_REGEX = /^PMID:\s*(\d{1,8})$/i;
 const NCBI_CSL_API =
 	'https://api.ncbi.nlm.nih.gov/lit/ctxp/v1/pubmed/?format=csl&id=';
+const PMID_REST_ENDPOINT = '/bibliography/v1/pmid/';
 const MAX_ENTRIES_PER_PASTE = 50;
 const MAX_INPUT_SIZE = 1024 * 1024; // 1 MB
 const PARSE_CONCURRENCY = 4;
@@ -37,6 +39,42 @@ function getDefaultFetchFn() {
 	}
 
 	return undefined;
+}
+
+async function resolvePmidViaFetch(pmid, fetchFn) {
+	const response = await fetchFn(`${NCBI_CSL_API}${pmid}`);
+
+	if (!response.ok) {
+		throw new Error(
+			`NCBI API returned ${response.status} for PMID ${pmid}`
+		);
+	}
+
+	return response.json();
+}
+
+async function resolvePmidViaRest(pmid) {
+	return apiFetch({
+		path: `${PMID_REST_ENDPOINT}${encodeURIComponent(pmid)}`,
+	});
+}
+
+async function resolvePmidCsl(pmid, fetchFn) {
+	if (typeof fetchFn === 'function') {
+		return resolvePmidViaFetch(pmid, fetchFn);
+	}
+
+	if (typeof apiFetch === 'function') {
+		return resolvePmidViaRest(pmid);
+	}
+
+	const defaultFetchFn = getDefaultFetchFn();
+
+	if (typeof defaultFetchFn === 'function') {
+		return resolvePmidViaFetch(pmid, defaultFetchFn);
+	}
+
+	throw new Error('Fetch API unavailable for PMID resolution');
 }
 
 function normalizeDoiInput(value) {
@@ -283,20 +321,8 @@ function splitChunkIntoDetectedItems(chunk) {
 
 const PARSER_BACKENDS = {
 	pmid: async (value, { fetchFn } = {}) => {
-		if (typeof fetchFn !== 'function') {
-			throw new Error('Fetch API unavailable for PMID resolution');
-		}
-
 		const pmid = normalizePmidInput(value);
-		const response = await fetchFn(`${NCBI_CSL_API}${pmid}`);
-
-		if (!response.ok) {
-			throw new Error(
-				`NCBI API returned ${response.status} for PMID ${pmid}`
-			);
-		}
-
-		const csl = await response.json();
+		const csl = await resolvePmidCsl(pmid, fetchFn);
 
 		return { cslItems: [csl] };
 	},
@@ -375,7 +401,7 @@ function formatUnsupportedInputError() {
 }
 
 function formatLatexDocumentError() {
-	return 'This looks like LaTeX, not a bibliography entry. Paste a DOI, BibTeX entry, or supported citation instead.';
+	return 'This looks like LaTeX, not a bibliography entry. Paste a DOI, PMID, BibTeX entry, or supported citation instead.';
 }
 
 function formatBackendParseError(format, err) {
@@ -422,7 +448,7 @@ function formatBackendParseError(format, err) {
 export async function parsePastedInput(
 	input,
 	styleKey = DEFAULT_CITATION_STYLE,
-	{ deferFormatting = true, fetchFn = getDefaultFetchFn() } = {}
+	{ deferFormatting = true, fetchFn } = {}
 ) {
 	const errors = [];
 	let truncated = false;
