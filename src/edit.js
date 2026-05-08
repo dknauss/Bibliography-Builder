@@ -860,6 +860,10 @@ export default function Edit({ attributes, setAttributes }) {
 		</>
 	);
 
+	const formToggleLabel = isFormOpen
+		? __('Hide citation form', 'borges-bibliography-builder')
+		: __('Show citation form', 'borges-bibliography-builder');
+
 	const manualFieldDefinitions = useMemo(
 		() => [
 			{
@@ -903,31 +907,27 @@ export default function Edit({ attributes, setAttributes }) {
 			<BlockControls>
 				<ToolbarGroup>
 					<ToolbarButton
+						aria-label={PASTE_IMPORT_TAB_LABEL}
 						icon={PasteImportIcon}
 						label={PASTE_IMPORT_TAB_LABEL}
+						title={PASTE_IMPORT_TAB_LABEL}
 						isPressed={isFormOpen && activeAddMode === 'paste'}
 						onClick={() => handleAddModeChange('paste')}
 					/>
 					<ToolbarButton
+						aria-label={MANUAL_ENTRY_TAB_LABEL}
 						icon={ManualEntryIcon}
 						label={MANUAL_ENTRY_TAB_LABEL}
+						title={MANUAL_ENTRY_TAB_LABEL}
 						isPressed={isFormOpen && activeAddMode === 'manual'}
 						onClick={() => handleAddModeChange('manual')}
 					/>
 					{citations.length > 0 && (
 						<ToolbarButton
+							aria-label={formToggleLabel}
 							icon={isFormOpen ? ChevronUpIcon : ChevronDownIcon}
-							label={
-								isFormOpen
-									? __(
-											'Hide citation form',
-											'borges-bibliography-builder'
-									  )
-									: __(
-											'Show citation form',
-											'borges-bibliography-builder'
-									  )
-							}
+							label={formToggleLabel}
+							title={formToggleLabel}
 							onClick={() => setIsFormOpen((open) => !open)}
 						/>
 					)}

@@ -137,6 +137,7 @@ async function insertBibliographyBlock(page) {
 }
 
 async function selectBibliographyBlock(page, editorFrame) {
+	await dismissEditorOverlay(page);
 	const blockRoot = editorFrame
 		.locator('.wp-block-bibliography-builder-bibliography')
 		.first();
@@ -311,6 +312,7 @@ test.describe('Bibliography block accessibility gate', () => {
 		});
 
 		await test.step('citation form collapse/expand controls are keyboard reachable', async () => {
+			await dismissEditorOverlay(page);
 			await selectBibliographyBlock(page, editorFrame);
 			const chevronButton = page
 				.getByRole('button', {
