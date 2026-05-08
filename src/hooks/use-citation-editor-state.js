@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from '@wordpress/element';
 import {
 	getAutoFormattedText,
+	getDefaultHeadingText,
 	getDisplayText,
 	getStyleDefinition,
 } from '../lib/formatting';
@@ -82,6 +83,7 @@ export function useCitationEditorState({
 	citationStyle,
 	citationsRef,
 	clearNotice,
+	headingText,
 	queueFocus,
 	setAttributes,
 }) {
@@ -425,9 +427,15 @@ export function useCitationEditorState({
 			}
 
 			const nextStyleLabel = getStyleDefinition(nextStyle).label;
+			const prevDefaultHeading = getDefaultHeadingText(citationStyle);
+			const nextDefaultHeading = getDefaultHeadingText(nextStyle);
+			const headingUpdate =
+				headingText === prevDefaultHeading
+					? { headingText: nextDefaultHeading }
+					: {};
 
 			if (!citationsRef.current.length) {
-				setAttributes({ citationStyle: nextStyle });
+				setAttributes({ citationStyle: nextStyle, ...headingUpdate });
 				announce('success', `Style changed to ${nextStyleLabel}.`, {
 					type: 'snackbar',
 				});
@@ -459,6 +467,7 @@ export function useCitationEditorState({
 			setAttributes({
 				citationStyle: nextStyle,
 				citations: updated,
+				...headingUpdate,
 			});
 			clearNotice();
 			resetEditingState();
@@ -480,6 +489,7 @@ export function useCitationEditorState({
 			citationStyle,
 			citationsRef,
 			clearNotice,
+			headingText,
 			queueFocus,
 			resetEditingState,
 			setAttributes,

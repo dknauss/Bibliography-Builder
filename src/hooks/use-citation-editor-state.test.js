@@ -18,8 +18,24 @@ jest.mock(
 );
 
 // Stub formatting utilities — only the shapes matter here.
+const HEADING_DEFAULTS = {
+	'chicago-notes-bibliography': 'Bibliography',
+	'chicago-author-date': 'References',
+	'apa-7': 'References',
+	'mla-9': 'Works Cited',
+	harvard: 'References',
+	ieee: 'References',
+	vancouver: 'References',
+	oscola: 'Bibliography',
+	abnt: 'Referências',
+};
+
 jest.mock('../lib/formatting', () => ({
 	getAutoFormattedText: jest.fn((citation) => citation.formattedText || ''),
+	getDefaultHeadingText: jest.fn(
+		(styleKey = 'chicago-notes-bibliography') =>
+			HEADING_DEFAULTS[styleKey] || 'Bibliography'
+	),
 	getDisplayText: jest.fn(
 		(citation) => citation.displayOverride || citation.formattedText || ''
 	),
@@ -663,6 +679,46 @@ describe('handleCitationStyleChange', () => {
 			'Style changed to Chicago Notes-Bibliography.',
 			{ type: 'snackbar' }
 		);
+	});
+
+	it('swaps heading to next style default when current heading matches previous style default', async () => {
+		const args = {
+			...makeHookArgs([]),
+			headingText: 'Bibliography',
+		};
+		const { result } = renderHook(() => useCitationEditorState(args));
+
+		await act(() => result.current.handleCitationStyleChange('mla-9'));
+
+		expect(args.setAttributes).toHaveBeenCalledWith(
+			expect.objectContaining({ headingText: 'Works Cited' })
+		);
+	});
+
+	it('preserves custom heading when switching styles', async () => {
+		const args = {
+			...makeHookArgs([]),
+			headingText: 'My Custom Heading',
+		};
+		const { result } = renderHook(() => useCitationEditorState(args));
+
+		await act(() => result.current.handleCitationStyleChange('mla-9'));
+
+		const call = args.setAttributes.mock.calls[0][0];
+		expect(call).not.toHaveProperty('headingText');
+	});
+
+	it('preserves blank heading when switching styles', async () => {
+		const args = {
+			...makeHookArgs([]),
+			headingText: '',
+		};
+		const { result } = renderHook(() => useCitationEditorState(args));
+
+		await act(() => result.current.handleCitationStyleChange('mla-9'));
+
+		const call = args.setAttributes.mock.calls[0][0];
+		expect(call).not.toHaveProperty('headingText');
 	});
 
 	it('keeps a persistent notice when style-change reformatting falls back', async () => {

@@ -576,4 +576,60 @@ describe('sortCitations', () => {
 			'four',
 		]);
 	});
+
+	it('produces identical order across 10 repeated calls for identical-key citations (stable sort)', () => {
+		const citations = [
+			createCitation({
+				id: 'first',
+				family: 'Smith',
+				year: 2020,
+				title: 'Alpha',
+			}),
+			createCitation({
+				id: 'second',
+				family: 'Smith',
+				year: 2020,
+				title: 'Alpha',
+			}),
+		];
+
+		const reference = sortCitations(citations, 'chicago-author-date').map(
+			(c) => c.id
+		);
+
+		for (let i = 0; i < 9; i++) {
+			expect(
+				sortCitations(citations, 'chicago-author-date').map((c) => c.id)
+			).toEqual(reference);
+		}
+	});
+
+	it('preserves stable order across JSON serialize/deserialize round-trip', () => {
+		const citations = [
+			createCitation({
+				id: 'first',
+				family: 'Jones',
+				year: 2021,
+				title: 'Same Title',
+			}),
+			createCitation({
+				id: 'second',
+				family: 'Jones',
+				year: 2021,
+				title: 'Same Title',
+			}),
+			createCitation({
+				id: 'third',
+				family: 'Jones',
+				year: 2021,
+				title: 'Same Title',
+			}),
+		];
+
+		const sorted = sortCitations(citations, 'apa-7');
+		const roundTripped = JSON.parse(JSON.stringify(sorted));
+		const reSorted = sortCitations(roundTripped, 'apa-7');
+
+		expect(reSorted.map((c) => c.id)).toEqual(sorted.map((c) => c.id));
+	});
 });

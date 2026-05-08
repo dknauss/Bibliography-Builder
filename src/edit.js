@@ -11,6 +11,7 @@ import {
 import {
 	BaseControl,
 	Button,
+	Notice,
 	PanelBody,
 	Placeholder,
 	SelectControl,
@@ -55,6 +56,7 @@ import {
 import {
 	buildPlainTextBibliographyContent,
 	downloadBibtexExport,
+	downloadBiblatexExport,
 	downloadCslJsonExport,
 	downloadRisExport,
 } from './lib/export';
@@ -162,6 +164,7 @@ export default function Edit({ attributes, setAttributes }) {
 	} bibliography-builder-list-${citationStyle}`;
 	const [inputValue, setInputValue] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+	const [oscolaNoticeDismissed, setOscolaNoticeDismissed] = useState(false);
 	const [isFormOpen, setIsFormOpen] = useState(true);
 	const [activeAddMode, setActiveAddMode] = useState('paste');
 	const [manualFields, setManualFields] = useState(() =>
@@ -200,6 +203,7 @@ export default function Edit({ attributes, setAttributes }) {
 		citationStyle,
 		citationsRef,
 		clearNotice,
+		headingText,
 		queueFocus,
 		setAttributes,
 	});
@@ -656,6 +660,25 @@ export default function Edit({ attributes, setAttributes }) {
 		}
 	}, [announce, citationStyle, queueFocus]);
 
+	const handleDownloadBiblatex = useCallback(async () => {
+		if (!citationsRef.current.length) {
+			return;
+		}
+
+		try {
+			await downloadBiblatexExport(citationsRef.current, citationStyle);
+			announce('success', 'Downloaded BibLaTeX export.', {
+				type: 'snackbar',
+			});
+		} catch (error) {
+			announce(
+				'error',
+				'Could not download BibLaTeX export in this browser.'
+			);
+			queueFocus({ type: 'notice' });
+		}
+	}, [announce, citationStyle, queueFocus]);
+
 	const handleDownloadRis = useCallback(() => {
 		if (!citationsRef.current.length) {
 			return;
@@ -951,6 +974,18 @@ export default function Edit({ attributes, setAttributes }) {
 								  )
 						}
 					/>
+					{citationStyle === 'oscola' && !oscolaNoticeDismissed && (
+						<Notice
+							status="info"
+							isDismissible
+							onRemove={() => setOscolaNoticeDismissed(true)}
+						>
+							{__(
+								'OSCOLA convention groups bibliographies by source type (cases, legislation, books, articles, online). Borges currently renders a single alphabetized list. See Epic-OSCOLA for tracking.',
+								'borges-bibliography-builder'
+							)}
+						</Notice>
+					)}
 					<TextControl
 						label={__(
 							'Visible Heading',
@@ -1046,6 +1081,19 @@ export default function Edit({ attributes, setAttributes }) {
 					<p>
 						{__(
 							'Downloads the current bibliography as BibTeX for reference-manager and scholarly-writing workflows.',
+							'borges-bibliography-builder'
+						)}
+					</p>
+					<Button
+						variant="secondary"
+						onClick={handleDownloadBiblatex}
+						disabled={!citations.length}
+					>
+						{__('Download BibLaTeX', 'borges-bibliography-builder')}
+					</Button>
+					<p>
+						{__(
+							'Downloads the current bibliography as BibLaTeX for LaTeX/Biber workflows with full Unicode support.',
 							'borges-bibliography-builder'
 						)}
 					</p>

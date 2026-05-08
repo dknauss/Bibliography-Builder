@@ -13,6 +13,7 @@ import { parsePastedInput } from './lib/parser';
 import {
 	buildPlainTextBibliographyContent,
 	downloadBibtexExport,
+	downloadBiblatexExport,
 	downloadCslJsonExport,
 	downloadRisExport,
 } from './lib/export';
@@ -284,6 +285,7 @@ jest.mock('./lib/export', () => ({
 		() => 'Alpha citation\nBeta citation\n'
 	),
 	downloadBibtexExport: jest.fn(),
+	downloadBiblatexExport: jest.fn(),
 	downloadCslJsonExport: jest.fn(),
 	downloadRisExport: jest.fn(),
 }));
@@ -437,6 +439,23 @@ jest.mock('./lib/formatting', () => ({
 
 		return placeholders[styleKey] || 'Bibliography';
 	}),
+	getDefaultHeadingText: jest.fn(
+		(styleKey = 'chicago-notes-bibliography') => {
+			const placeholders = {
+				'chicago-notes-bibliography': 'Bibliography',
+				'chicago-author-date': 'References',
+				'apa-7': 'References',
+				'mla-9': 'Works Cited',
+				harvard: 'References',
+				ieee: 'References',
+				vancouver: 'References',
+				oscola: 'Bibliography',
+				abnt: 'Referências',
+			};
+
+			return placeholders[styleKey] || 'Bibliography';
+		}
+	),
 	getListSemantics: jest.fn((styleKey) =>
 		['ieee', 'vancouver'].includes(styleKey) ? 'ol' : 'ul'
 	),
@@ -546,6 +565,7 @@ describe('Edit focus management', () => {
 			'Alpha citation\nBeta citation\n'
 		);
 		downloadBibtexExport.mockReset();
+		downloadBiblatexExport.mockReset();
 		downloadCslJsonExport.mockReset();
 		downloadRisExport.mockReset();
 		copyTextToClipboard.mockReset();
@@ -574,7 +594,7 @@ describe('Edit focus management', () => {
 		await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
 		expect(await screen.findByRole('status')).toHaveTextContent(
-			'Paste a DOI, BibTeX entry, or supported citation for a book, article, chapter, or webpage. Separate multiple formatted citations with a blank line.'
+			'Paste a DOI, PMID (PubMed ID), BibTeX entry, or supported citation for a book, article, chapter, or webpage. Separate multiple formatted citations with a blank line.'
 		);
 	});
 
@@ -582,7 +602,7 @@ describe('Edit focus management', () => {
 		parsePastedInput.mockResolvedValue({
 			entries: [],
 			errors: [
-				'Paste a DOI, BibTeX entry, or supported citation for a book, article, chapter, or webpage. Separate multiple formatted citations with a blank line.',
+				'Paste a DOI, PMID (PubMed ID), BibTeX entry, or supported citation for a book, article, chapter, or webpage. Separate multiple formatted citations with a blank line.',
 			],
 			truncated: false,
 			remainingInput: 'Private Draft Citation',
@@ -599,7 +619,7 @@ describe('Edit focus management', () => {
 		const status = await screen.findByRole('status');
 
 		expect(status).toHaveTextContent(
-			'Paste a DOI, BibTeX entry, or supported citation for a book, article, chapter, or webpage. Separate multiple formatted citations with a blank line.'
+			'Paste a DOI, PMID (PubMed ID), BibTeX entry, or supported citation for a book, article, chapter, or webpage. Separate multiple formatted citations with a blank line.'
 		);
 		expect(status).not.toHaveTextContent('Private Draft Citation');
 		expect(screen.getByLabelText('Add citations')).toHaveValue(
@@ -618,7 +638,7 @@ describe('Edit focus management', () => {
 				}),
 			],
 			errors: [
-				'Paste a DOI, BibTeX entry, or supported citation for a book, article, chapter, or webpage. Separate multiple formatted citations with a blank line.',
+				'Paste a DOI, PMID (PubMed ID), BibTeX entry, or supported citation for a book, article, chapter, or webpage. Separate multiple formatted citations with a blank line.',
 			],
 			truncated: false,
 			remainingInput: 'Unparsed citation chunk',
@@ -1270,6 +1290,74 @@ describe('Edit focus management', () => {
 
 		expect(await screen.findByRole('status')).toHaveTextContent(
 			'Could not download RIS export in this browser.'
+		);
+	});
+
+	it('downloads a BibLaTeX export from the inspector when citations are present', async () => {
+		downloadBiblatexExport.mockResolvedValue('blob:biblatex');
+
+		render(
+			<EditHarness
+				initialCitations={[
+					createCitation({
+						id: 'citation-1',
+						family: 'Alpha',
+						year: 2024,
+						title: 'Alpha citation',
+					}),
+				]}
+			/>
+		);
+
+		await userEvent.click(
+			screen.getByRole('button', { name: 'Download BibLaTeX' })
+		);
+
+		await waitFor(() => {
+			expect(downloadBiblatexExport).toHaveBeenCalledWith(
+				expect.arrayContaining([
+					expect.objectContaining({ id: 'citation-1' }),
+				]),
+				'chicago-notes-bibliography'
+			);
+		});
+		expect(await screen.findByRole('status')).toHaveTextContent(
+			'Downloaded BibLaTeX export.'
+		);
+	});
+
+	it('disables the BibLaTeX export button when there are no citations', () => {
+		render(<EditHarness />);
+
+		expect(
+			screen.getByRole('button', { name: 'Download BibLaTeX' })
+		).toBeDisabled();
+	});
+
+	it('shows an error notice when BibLaTeX export fails', async () => {
+		downloadBiblatexExport.mockRejectedValueOnce(
+			new Error('download failed')
+		);
+
+		render(
+			<EditHarness
+				initialCitations={[
+					createCitation({
+						id: 'citation-1',
+						family: 'Alpha',
+						year: 2024,
+						title: 'Alpha citation',
+					}),
+				]}
+			/>
+		);
+
+		await userEvent.click(
+			screen.getByRole('button', { name: 'Download BibLaTeX' })
+		);
+
+		expect(await screen.findByRole('status')).toHaveTextContent(
+			'Could not download BibLaTeX export in this browser.'
 		);
 	});
 
@@ -2553,5 +2641,37 @@ describe('Edit focus management', () => {
 				screen.getByText('Learning Blocks Revised').closest('li')
 			).toHaveFocus();
 		});
+	});
+});
+
+describe('OSCOLA inspector notice', () => {
+	it('shows OSCOLA limitation notice when OSCOLA style is selected', () => {
+		render(<EditHarness initialStyle="oscola" />);
+
+		expect(
+			screen.getByText(/OSCOLA convention groups bibliographies/i)
+		).toBeInTheDocument();
+	});
+
+	it('does not show OSCOLA notice for non-OSCOLA styles', () => {
+		render(<EditHarness initialStyle="chicago-notes-bibliography" />);
+
+		expect(
+			screen.queryByText(/OSCOLA convention groups bibliographies/i)
+		).not.toBeInTheDocument();
+	});
+
+	it('hides OSCOLA notice after dismissal', () => {
+		render(<EditHarness initialStyle="oscola" />);
+
+		expect(
+			screen.getByText(/OSCOLA convention groups bibliographies/i)
+		).toBeInTheDocument();
+
+		fireEvent.click(screen.getByRole('button', { name: /dismiss/i }));
+
+		expect(
+			screen.queryByText(/OSCOLA convention groups bibliographies/i)
+		).not.toBeInTheDocument();
 	});
 });
