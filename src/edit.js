@@ -274,9 +274,13 @@ export default function Edit({ attributes, setAttributes }) {
 				const { formatBibliographyEntries } = await import(
 					'./lib/formatting/csl'
 				);
+				const mergedEntries = [
+					...citationsRef.current,
+					...uniqueEntries,
+				];
 				let formatterFallback = false;
 				const formattedTexts = await formatBibliographyEntries(
-					uniqueEntries.map((citation) => citation.csl),
+					mergedEntries.map((citation) => citation.csl),
 					citationStyle,
 					{
 						onFallback: () => {
@@ -284,23 +288,21 @@ export default function Edit({ attributes, setAttributes }) {
 						},
 					}
 				);
-				const formattedUniqueEntries = uniqueEntries.map(
+				const formattedMergedEntries = mergedEntries.map(
 					(entry, index) => ({
 						...entry,
 						formattedText: formattedTexts[index],
 					})
 				);
 				const updated = sortCitations(
-					[...citationsRef.current, ...formattedUniqueEntries],
+					formattedMergedEntries,
 					citationStyle
 				);
 				const reviewWarningCount = uniqueEntries.filter(
 					(entry) => (entry.parseWarnings || []).length > 0
 				).length;
 				const firstNewEntry = updated.find((citation) =>
-					formattedUniqueEntries.some(
-						(entry) => entry.id === citation.id
-					)
+					uniqueEntries.some((entry) => entry.id === citation.id)
 				);
 
 				citationsRef.current = updated;
@@ -386,20 +388,54 @@ export default function Edit({ attributes, setAttributes }) {
 	]);
 
 	const handleDelete = useCallback(
-		(id) => {
+		async (id) => {
 			const currentCitations = citationsRef.current;
 			const deletedIndex = currentCitations.findIndex((c) => c.id === id);
 			const entry = currentCitations[deletedIndex];
+			let formatterFallback = false;
 
 			if (!entry) {
 				return;
 			}
 
-			const updated = currentCitations.filter((c) => c.id !== id);
+			let updated = currentCitations.filter((c) => c.id !== id);
+
+			if (updated.length > 0 && !isNumericFamily) {
+				try {
+					const { formatBibliographyEntries } = await import(
+						'./lib/formatting/csl'
+					);
+					const formattedTexts = await formatBibliographyEntries(
+						updated.map((citation) => citation.csl),
+						citationStyle,
+						{
+							onFallback: () => {
+								formatterFallback = true;
+							},
+						}
+					);
+
+					updated = sortCitations(
+						updated.map((citation, index) => ({
+							...citation,
+							formattedText: formattedTexts[index] || '',
+						})),
+						citationStyle
+					);
+				} catch (error) {
+					formatterFallback = true;
+				}
+			}
+
 			citationsRef.current = updated;
 			setAttributes({ citations: updated });
-
-			announce('success', 'Citation removed.', { type: 'snackbar' });
+			announce(
+				formatterFallback ? 'warning' : 'success',
+				formatterFallback
+					? `Citation removed. ${FORMATTER_FALLBACK_MESSAGE}`
+					: 'Citation removed.',
+				formatterFallback ? {} : { type: 'snackbar' }
+			);
 
 			if (!updated.length) {
 				queueFocus({ type: 'paste' });
@@ -413,7 +449,7 @@ export default function Edit({ attributes, setAttributes }) {
 				queueFocus({ type: 'entry', id: nextEntry.id });
 			}
 		},
-		[setAttributes, announce, queueFocus]
+		[setAttributes, announce, queueFocus, isNumericFamily, citationStyle]
 	);
 
 	const handleInputChange = useCallback(
@@ -516,8 +552,24 @@ export default function Edit({ attributes, setAttributes }) {
 					},
 				}
 			);
+			const { formatBibliographyEntries } = await import(
+				'./lib/formatting/csl'
+			);
+			const mergedEntries = [...citationsRef.current, entry];
+			const formattedTexts = await formatBibliographyEntries(
+				mergedEntries.map((citation) => citation.csl),
+				citationStyle,
+				{
+					onFallback: () => {
+						formatterFallback = true;
+					},
+				}
+			);
 			const updated = sortCitations(
-				[...citationsRef.current, entry],
+				mergedEntries.map((citation, index) => ({
+					...citation,
+					formattedText: formattedTexts[index] || '',
+				})),
 				citationStyle
 			);
 

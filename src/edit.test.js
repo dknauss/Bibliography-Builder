@@ -640,6 +640,54 @@ describe('Edit focus management', () => {
 		);
 	});
 
+	it('reformats the full bibliography when parsed entries are appended', async () => {
+		parsePastedInput.mockResolvedValue({
+			entries: [
+				createCitation({
+					id: 'entry-b',
+					family: 'Alpha',
+					year: 2023,
+					title: 'Alpha citation',
+				}),
+			],
+			errors: [],
+			truncated: false,
+			remainingInput: '',
+		});
+
+		render(
+			<EditHarness
+				initialCitations={[
+					createCitation({
+						id: 'entry-a',
+						family: 'Zulu',
+						year: 2024,
+						title: 'Zulu citation',
+					}),
+				]}
+			/>
+		);
+
+		await userEvent.type(
+			screen.getByLabelText('Add citations'),
+			'10.1234/context-aware'
+		);
+		await userEvent.click(screen.getByRole('button', { name: 'Add' }));
+
+		await waitFor(() => {
+			expect(formatBibliographyEntries).toHaveBeenCalledWith(
+				[
+					expect.objectContaining({ title: 'Zulu citation' }),
+					expect.objectContaining({ title: 'Alpha citation' }),
+				],
+				'chicago-notes-bibliography',
+				expect.objectContaining({
+					onFallback: expect.any(Function),
+				})
+			);
+		});
+	});
+
 	it('keeps fallback and truncation details in the parse result notice', async () => {
 		parsePastedInput.mockResolvedValue({
 			entries: [
@@ -1460,6 +1508,45 @@ describe('Edit focus management', () => {
 		expect(screen.getByLabelText('Title')).toHaveValue('');
 	});
 
+	it('reformats the full bibliography when adding a manual citation', async () => {
+		render(
+			<EditHarness
+				initialCitations={[
+					createCitation({
+						id: 'existing',
+						family: 'Zulu',
+						year: 2024,
+						title: 'Zulu citation',
+					}),
+				]}
+			/>
+		);
+
+		await userEvent.click(
+			screen.getAllByRole('button', { name: 'Manual Entry' })[0]
+		);
+		await userEvent.selectOptions(
+			screen.getByLabelText('Publication Type'),
+			'book'
+		);
+		await userEvent.type(screen.getByLabelText('Author(s)'), 'Alpha, Ada');
+		await userEvent.type(screen.getByLabelText('Title'), 'Alpha citation');
+		await userEvent.click(screen.getByRole('button', { name: 'Add' }));
+
+		await waitFor(() => {
+			expect(formatBibliographyEntries).toHaveBeenCalledWith(
+				[
+					expect.objectContaining({ title: 'Zulu citation' }),
+					expect.objectContaining({ title: 'Alpha citation' }),
+				],
+				'chicago-notes-bibliography',
+				expect.objectContaining({
+					onFallback: expect.any(Function),
+				})
+			);
+		});
+	});
+
 	it('keeps a persistent notice when manual citation formatting falls back', async () => {
 		formatBibliographyEntry.mockImplementationOnce(
 			(csl, style, options) => {
@@ -1905,6 +1992,43 @@ describe('Edit focus management', () => {
 		});
 	});
 
+	it('reformats remaining citations after deletion in author-date styles', async () => {
+		render(
+			<EditHarness
+				initialStyle="chicago-author-date"
+				initialCitations={[
+					createCitation({
+						id: 'entry-a',
+						family: 'Alpha',
+						year: 2020,
+						title: 'Alpha citation',
+					}),
+					createCitation({
+						id: 'entry-b',
+						family: 'Alpha',
+						year: 2020,
+						title: 'Beta citation',
+					}),
+				]}
+			/>
+		);
+
+		const deleteButtons = screen.getAllByRole('button', {
+			name: 'Delete citation: Alpha 2020',
+		});
+		await userEvent.click(deleteButtons[0]);
+
+		await waitFor(() => {
+			expect(formatBibliographyEntries).toHaveBeenCalledWith(
+				[expect.objectContaining({ title: 'Beta citation' })],
+				'chicago-author-date',
+				expect.objectContaining({
+					onFallback: expect.any(Function),
+				})
+			);
+		});
+	});
+
 	it('moves focus back to the add-citations textarea after deleting the last citation', async () => {
 		render(
 			<EditHarness
@@ -2131,13 +2255,15 @@ describe('Edit focus management', () => {
 		await userEvent.click(screen.getByRole('button', { name: 'Save' }));
 
 		await waitFor(() => {
-			expect(formatBibliographyEntry).toHaveBeenCalledWith(
-				expect.objectContaining({
-					author: [
-						{ family: 'Smith', given: 'Ada' },
-						{ family: 'Scholar', given: 'Jane' },
-					],
-				}),
+			expect(formatBibliographyEntries).toHaveBeenCalledWith(
+				[
+					expect.objectContaining({
+						author: [
+							{ family: 'Smith', given: 'Ada' },
+							{ family: 'Scholar', given: 'Jane' },
+						],
+					}),
+				],
 				'chicago-notes-bibliography',
 				expect.objectContaining({
 					onFallback: expect.any(Function),

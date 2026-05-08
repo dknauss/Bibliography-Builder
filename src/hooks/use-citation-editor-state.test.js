@@ -38,15 +38,7 @@ jest.mock('../lib/sorter', () => ({
 	sortCitations: jest.fn((citations) => citations),
 }));
 
-// Intercept the dynamic import('../lib/formatting/csl') used inside the hook.
-// Variable must be prefixed with `mock` so Jest's hoisting transform allows
-// it to be referenced inside the jest.mock() factory.
-let mockFormatBibliographyEntry;
-
 jest.mock('../lib/formatting/csl', () => ({
-	get formatBibliographyEntry() {
-		return mockFormatBibliographyEntry;
-	},
 	formatBibliographyEntries: jest.fn((items) =>
 		items.map(() => 'Reformatted entry')
 	),
@@ -92,9 +84,7 @@ function makeHookArgs(citations = [makeCitation()]) {
 }
 
 beforeEach(() => {
-	mockFormatBibliographyEntry = jest.fn(() =>
-		Promise.resolve('Formatted entry')
-	);
+	jest.clearAllMocks();
 	formatBibliographyEntries.mockImplementation((items) =>
 		items.map(() => 'Reformatted entry')
 	);
@@ -262,13 +252,6 @@ describe('handleEditStart / handleEditConfirm / handleEditCancel', () => {
 // --- Structured edit save — async race condition ---
 
 describe('handleStructuredEditSave race condition', () => {
-	beforeEach(() => {
-		// Default: resolve immediately so normal saves work.
-		mockFormatBibliographyEntry = jest.fn(() =>
-			Promise.resolve('Formatted entry')
-		);
-	});
-
 	it('commits updated citation when no cancel occurs during save', async () => {
 		const args = makeHookArgs();
 		const { result } = renderHook(() => useCitationEditorState(args));
@@ -286,21 +269,69 @@ describe('handleStructuredEditSave race condition', () => {
 		expect(result.current.structuredEditingId).toBeNull();
 	});
 
-	it('does not commit when cancel fires while formatBibliographyEntry is pending', async () => {
+	it('reformats the full bibliography when structured edits are saved', async () => {
+		const args = makeHookArgs([
+			makeCitation({
+				id: 'cit-1',
+				formattedText: 'First entry',
+				csl: {
+					type: 'book',
+					title: 'First title',
+					author: [{ family: 'Smith', given: 'Ada' }],
+					issued: { 'date-parts': [[2024]] },
+				},
+			}),
+			makeCitation({
+				id: 'cit-2',
+				formattedText: 'Second entry',
+				csl: {
+					type: 'book',
+					title: 'Second title',
+					author: [{ family: 'Smith', given: 'Ada' }],
+					issued: { 'date-parts': [[2024]] },
+				},
+			}),
+		]);
+
+		formatBibliographyEntries.mockResolvedValueOnce([
+			'First title (2024a)',
+			'Second title (2024b)',
+		]);
+		const { result } = renderHook(() => useCitationEditorState(args));
+
+		act(() => result.current.handleStructuredEditStart('cit-1'));
+		act(() =>
+			result.current.handleStructuredFieldChange('title', 'First title')
+		);
+		await act(() => result.current.handleStructuredEditSave());
+
+		expect(formatBibliographyEntries).toHaveBeenCalledWith(
+			[
+				expect.objectContaining({ title: 'First title' }),
+				expect.objectContaining({ title: 'Second title' }),
+			],
+			'chicago-notes-bibliography',
+			expect.objectContaining({
+				onFallback: expect.any(Function),
+			})
+		);
+	});
+
+	it('does not commit when cancel fires while formatBibliographyEntries is pending', async () => {
 		// Create the promise once so resolveFormat is set synchronously by the
 		// Promise constructor, regardless of when the mock is actually called.
 		let resolveFormat;
 		const pendingFormat = new Promise((resolve) => {
 			resolveFormat = resolve;
 		});
-		mockFormatBibliographyEntry = jest.fn(() => pendingFormat);
+		formatBibliographyEntries.mockReturnValueOnce(pendingFormat);
 
 		const args = makeHookArgs();
 		const { result } = renderHook(() => useCitationEditorState(args));
 
 		act(() => result.current.handleStructuredEditStart('cit-1'));
 
-		// Start save (async, will block on formatBibliographyEntry).
+		// Start save (async, will block on formatBibliographyEntries).
 		let savePromise;
 		act(() => {
 			savePromise = result.current.handleStructuredEditSave();
@@ -310,18 +341,18 @@ describe('handleStructuredEditSave race condition', () => {
 		act(() => result.current.handleStructuredEditCancel());
 
 		// Resolve the format and let the save finish.
-		resolveFormat('Late formatted entry');
+		resolveFormat(['Late formatted entry']);
 		await act(async () => savePromise);
 
 		expect(args.setAttributes).not.toHaveBeenCalled();
 	});
 
-	it('does not commit when cancel fires between formatBibliographyEntry resolving and setAttributes', async () => {
+	it('does not commit when cancel fires between formatBibliographyEntries resolving and setAttributes', async () => {
 		let resolveFormat;
 		const pendingFormat = new Promise((resolve) => {
 			resolveFormat = resolve;
 		});
-		mockFormatBibliographyEntry = jest.fn(() => pendingFormat);
+		formatBibliographyEntries.mockReturnValueOnce(pendingFormat);
 
 		const args = makeHookArgs();
 		const { result } = renderHook(() => useCitationEditorState(args));
@@ -335,7 +366,7 @@ describe('handleStructuredEditSave race condition', () => {
 
 		act(() => result.current.handleStructuredEditCancel());
 
-		resolveFormat('Formatted');
+		resolveFormat(['Formatted']);
 		await act(async () => savePromise);
 
 		expect(args.setAttributes).not.toHaveBeenCalled();
@@ -397,7 +428,7 @@ describe('handleStructuredEditSave guard branches', () => {
 		await act(() => result.current.handleStructuredEditSave());
 
 		expect(args.setAttributes).not.toHaveBeenCalled();
-		expect(mockFormatBibliographyEntry).not.toHaveBeenCalled();
+		expect(formatBibliographyEntries).not.toHaveBeenCalled();
 	});
 
 	it('does nothing when structured edit starts with an unknown id', async () => {
@@ -420,7 +451,7 @@ describe('handleStructuredEditSave guard branches', () => {
 		await act(() => result.current.handleStructuredEditSave());
 
 		expect(args.setAttributes).not.toHaveBeenCalled();
-		expect(mockFormatBibliographyEntry).not.toHaveBeenCalled();
+		expect(formatBibliographyEntries).not.toHaveBeenCalled();
 	});
 
 	it('blocks save and focuses the notice when identifier validation fails', async () => {
@@ -543,11 +574,10 @@ describe('handleStructuredEditSave guard branches', () => {
 
 	it('does not commit when cancel fires while formatting is pending', async () => {
 		let resolveFormat;
-		mockFormatBibliographyEntry = jest.fn(
-			() =>
-				new Promise((resolve) => {
-					resolveFormat = resolve;
-				})
+		formatBibliographyEntries.mockReturnValueOnce(
+			new Promise((resolve) => {
+				resolveFormat = resolve;
+			})
 		);
 		const args = makeHookArgs();
 		const { result } = renderHook(() => useCitationEditorState(args));
@@ -560,21 +590,25 @@ describe('handleStructuredEditSave guard branches', () => {
 		});
 
 		await waitFor(() =>
-			expect(mockFormatBibliographyEntry).toHaveBeenCalled()
+			expect(formatBibliographyEntries).toHaveBeenCalled()
 		);
 		act(() => result.current.handleStructuredEditCancel());
 
-		resolveFormat('Late formatted entry');
+		resolveFormat(['Late formatted entry']);
 		await act(async () => savePromise);
 
 		expect(args.setAttributes).not.toHaveBeenCalled();
 	});
 
 	it('announces and focuses notice when structured reformatting falls back', async () => {
-		mockFormatBibliographyEntry = jest.fn((csl, style, options) => {
-			options.onFallback();
-			return Promise.resolve('Fallback formatted entry');
-		});
+		formatBibliographyEntries.mockImplementation(
+			(items, style, options) => {
+				options.onFallback();
+				return Promise.resolve(
+					items.map(() => 'Fallback formatted entry')
+				);
+			}
+		);
 		const args = makeHookArgs();
 		const { result } = renderHook(() => useCitationEditorState(args));
 

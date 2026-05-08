@@ -316,7 +316,7 @@ export function useCitationEditorState({
 			delete updatedCsl.issued;
 		}
 
-		const { formatBibliographyEntry } = await import(
+		const { formatBibliographyEntries } = await import(
 			'../lib/formatting/csl'
 		);
 
@@ -335,9 +335,19 @@ export function useCitationEditorState({
 			return;
 		}
 
+		const nextEntries = citationsRef.current.map((entry) =>
+			entry.id === activeStructuredEditingId
+				? {
+						...entry,
+						csl: updatedCsl,
+						displayOverride: null,
+						parseWarnings: [],
+				  }
+				: entry
+		);
 		let formatterFallback = false;
-		const formattedText = await formatBibliographyEntry(
-			updatedCsl,
+		const formattedTexts = await formatBibliographyEntries(
+			nextEntries.map((entry) => entry.csl),
 			citationStyle,
 			{
 				onFallback: () => {
@@ -346,24 +356,17 @@ export function useCitationEditorState({
 			}
 		);
 
-		// Second cancel guard: a cancel that arrives during formatBibliographyEntry
+		// Second cancel guard: a cancel that arrives during formatBibliographyEntries
 		// would set structuredEditingIdRef.current to null — don't commit stale data.
 		if (structuredEditingIdRef.current !== activeStructuredEditingId) {
 			return;
 		}
 
 		const updated = sortCitations(
-			citationsRef.current.map((entry) =>
-				entry.id === activeStructuredEditingId
-					? {
-							...entry,
-							csl: updatedCsl,
-							formattedText,
-							displayOverride: null,
-							parseWarnings: [],
-					  }
-					: entry
-			),
+			nextEntries.map((entry, index) => ({
+				...entry,
+				formattedText: formattedTexts[index],
+			})),
 			citationStyle
 		);
 
