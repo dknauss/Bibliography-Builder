@@ -129,6 +129,28 @@ describe('export helpers', () => {
 		expect(revokeObjectURL).toHaveBeenCalledWith('blob:download');
 	});
 
+	it('throws clearly when browser download APIs are unavailable', () => {
+		expect(() =>
+			downloadTextExport(
+				{
+					content: 'citation data',
+					filename: 'citations.txt',
+					mimeType: 'text/plain',
+				},
+				{
+					documentRef: {
+						createElement: jest.fn(),
+						body: null,
+					},
+					urlRef: {
+						createObjectURL: jest.fn(),
+					},
+					BlobCtor: Blob,
+				}
+			)
+		).toThrow('Download API unavailable');
+	});
+
 	it('downloads CSL-JSON with the expected filename and MIME type', () => {
 		const click = jest.fn();
 		const remove = jest.fn();
@@ -368,6 +390,28 @@ describe('export helpers', () => {
 		expect(content).toContain('SP  - 117');
 		expect(content).toContain('EP  - 134');
 		expect(content).toContain('ER  - ');
+	});
+
+	it('builds RIS authors from literal and partial personal names', () => {
+		const content = buildRisExportContent(
+			[
+				{
+					id: 'citation-1',
+					csl: {
+						type: 'report',
+						title: 'Institutional Report',
+						author: [
+							{ literal: 'World Health Organization' },
+							{ given: 'Alex' },
+						],
+					},
+				},
+			],
+			'apa-7'
+		);
+
+		expect(content).toContain('AU  - World Health Organization');
+		expect(content).toContain('AU  - Alex');
 	});
 
 	it('downloads RIS with the expected filename and MIME type', () => {

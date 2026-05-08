@@ -183,13 +183,13 @@ jest.mock(
 					},
 					children || 'icon'
 				),
-			TextControl: ({ label, value, disabled }) =>
+			TextControl: ({ label, value, disabled, onChange }) =>
 				ReactLocal.createElement('input', {
 					'aria-label': label,
 					value,
 					disabled,
-					readOnly: true,
-					onChange: () => {},
+					readOnly: !onChange,
+					onChange: (event) => onChange?.(event.target.value),
 				}),
 			ToggleControl: ({ label, checked, onChange, help }) =>
 				ReactLocal.createElement(
@@ -994,6 +994,39 @@ describe('Edit focus management', () => {
 		});
 	});
 
+	it('moves numeric citations up with arrow controls', async () => {
+		render(
+			<EditHarness
+				initialStyle="ieee"
+				initialCitations={[
+					createCitation({
+						id: 'zulu',
+						family: 'Zulu',
+						year: 2024,
+						title: 'Zulu citation',
+					}),
+					createCitation({
+						id: 'alpha',
+						family: 'Alpha',
+						year: 2023,
+						title: 'Alpha citation',
+					}),
+				]}
+			/>
+		);
+
+		await userEvent.click(
+			screen.getByRole('button', { name: "Move 'Alpha 2023' up" })
+		);
+
+		await waitFor(() => {
+			const entries = screen.getAllByRole('listitem');
+			expect(entries[0]).toHaveTextContent('Alpha citation');
+			expect(entries[1]).toHaveTextContent('Zulu citation');
+			expect(entries[0]).toHaveFocus();
+		});
+	});
+
 	it('supports Alt+ArrowDown reorder shortcut for numeric styles', async () => {
 		render(
 			<EditHarness
@@ -1023,6 +1056,38 @@ describe('Edit focus management', () => {
 			const entries = screen.getAllByRole('listitem');
 			expect(entries[0]).toHaveTextContent('Alpha citation');
 			expect(entries[1]).toHaveTextContent('Zulu citation');
+		});
+	});
+
+	it('supports Alt+ArrowUp reorder shortcut for numeric styles', async () => {
+		render(
+			<EditHarness
+				initialStyle="ieee"
+				initialCitations={[
+					createCitation({
+						id: 'alpha',
+						family: 'Alpha',
+						year: 2023,
+						title: 'Alpha citation',
+					}),
+					createCitation({
+						id: 'zulu',
+						family: 'Zulu',
+						year: 2024,
+						title: 'Zulu citation',
+					}),
+				]}
+			/>
+		);
+
+		const secondEntry = screen.getAllByRole('listitem')[1];
+		secondEntry.focus();
+		fireEvent.keyDown(secondEntry, { key: 'ArrowUp', altKey: true });
+
+		await waitFor(() => {
+			const entries = screen.getAllByRole('listitem');
+			expect(entries[0]).toHaveTextContent('Zulu citation');
+			expect(entries[1]).toHaveTextContent('Alpha citation');
 		});
 	});
 
@@ -1070,6 +1135,19 @@ describe('Edit focus management', () => {
 			'Style changed to APA 7.'
 		);
 		expect(screen.getByLabelText('Citation Style')).toHaveValue('apa-7');
+	});
+
+	it('updates the visible bibliography heading from inspector settings', async () => {
+		render(<EditHarness />);
+
+		await userEvent.type(
+			screen.getByLabelText('Visible Heading'),
+			'Works Cited'
+		);
+
+		expect(screen.getByLabelText('Visible Heading')).toHaveValue(
+			'Works Cited'
+		);
 	});
 
 	it('renders notices inline within the block UI', async () => {
@@ -1660,6 +1738,31 @@ describe('Edit focus management', () => {
 		);
 	});
 
+	it('keeps a persistent notice when manual bibliography reformatting falls back', async () => {
+		formatBibliographyEntries.mockImplementationOnce(
+			(cslItems, style, options) => {
+				options.onFallback();
+				return cslItems.map((item) => item.title);
+			}
+		);
+
+		render(<EditHarness />);
+
+		await userEvent.click(
+			screen.getAllByRole('button', { name: 'Manual Entry' })[0]
+		);
+		await userEvent.selectOptions(
+			screen.getByLabelText('Publication Type'),
+			'book'
+		);
+		await userEvent.type(screen.getByLabelText('Title'), 'Manual Book');
+		await userEvent.click(screen.getByRole('button', { name: 'Add' }));
+
+		expect(await screen.findByRole('status')).toHaveTextContent(
+			'Added 1 citation. Formatter unavailable; added fallback citation text.'
+		);
+	});
+
 	it('shows an error notice when manual citation creation fails', async () => {
 		formatBibliographyEntry.mockRejectedValueOnce(
 			new Error('format failed')
@@ -2115,6 +2218,79 @@ describe('Edit focus management', () => {
 				})
 			);
 		});
+	});
+
+	it('keeps a persistent notice when deletion reformatting falls back', async () => {
+		formatBibliographyEntries.mockImplementationOnce(
+			(cslItems, style, options) => {
+				options.onFallback();
+				return cslItems.map((item) => item.title);
+			}
+		);
+
+		render(
+			<EditHarness
+				initialStyle="chicago-author-date"
+				initialCitations={[
+					createCitation({
+						id: 'entry-a',
+						family: 'Alpha',
+						year: 2020,
+						title: 'Alpha citation',
+					}),
+					createCitation({
+						id: 'entry-b',
+						family: 'Alpha',
+						year: 2020,
+						title: 'Beta citation',
+					}),
+				]}
+			/>
+		);
+
+		const deleteButtons = screen.getAllByRole('button', {
+			name: 'Delete citation: Alpha 2020',
+		});
+		await userEvent.click(deleteButtons[0]);
+
+		expect(await screen.findByRole('status')).toHaveTextContent(
+			'Citation removed. Formatter unavailable; added fallback citation text.'
+		);
+	});
+
+	it('keeps a persistent notice when deletion reformatting throws', async () => {
+		formatBibliographyEntries.mockRejectedValueOnce(
+			new Error('format failed')
+		);
+
+		render(
+			<EditHarness
+				initialStyle="chicago-author-date"
+				initialCitations={[
+					createCitation({
+						id: 'entry-a',
+						family: 'Alpha',
+						year: 2020,
+						title: 'Alpha citation',
+					}),
+					createCitation({
+						id: 'entry-b',
+						family: 'Alpha',
+						year: 2020,
+						title: 'Beta citation',
+					}),
+				]}
+			/>
+		);
+
+		const deleteButtons = screen.getAllByRole('button', {
+			name: 'Delete citation: Alpha 2020',
+		});
+		await userEvent.click(deleteButtons[0]);
+
+		expect(await screen.findByRole('status')).toHaveTextContent(
+			'Citation removed. Formatter unavailable; added fallback citation text.'
+		);
 	});
 
 	it('moves focus back to the add-citations textarea after deleting the last citation', async () => {

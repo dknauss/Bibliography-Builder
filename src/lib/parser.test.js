@@ -1158,6 +1158,24 @@ describe('PMID input resolution', () => {
 		});
 	});
 
+	it('uses window.fetch for PMID resolution when no fetch override is supplied', async () => {
+		const originalFetch = window.fetch;
+		const fetchFn = makeFetchFn();
+		window.fetch = fetchFn;
+
+		try {
+			const result = await parsePastedInput('PMID:36658352', 'apa');
+
+			expect(fetchFn).toHaveBeenCalledWith(
+				'https://api.ncbi.nlm.nih.gov/lit/ctxp/v1/pubmed/?format=csl&id=36658352'
+			);
+			expect(result.entries).toHaveLength(1);
+			expect(result.errors).toHaveLength(0);
+		} finally {
+			window.fetch = originalFetch;
+		}
+	});
+
 	it('returns an error when NCBI returns a non-OK status', async () => {
 		const fetchFn = makeFetchFn(404);
 
@@ -1168,6 +1186,22 @@ describe('PMID input resolution', () => {
 		expect(result.entries).toHaveLength(0);
 		expect(result.errors).toHaveLength(1);
 		expect(result.errors[0]).toMatch(/PMID/i);
+	});
+
+	it('returns a PMID error when the Fetch API is unavailable', async () => {
+		const originalFetch = window.fetch;
+		delete window.fetch;
+
+		try {
+			const result = await parsePastedInput('PMID:36658352', 'apa');
+
+			expect(result.entries).toHaveLength(0);
+			expect(result.errors).toEqual([
+				"Couldn't resolve the PMID. Check the number and try again.",
+			]);
+		} finally {
+			window.fetch = originalFetch;
+		}
 	});
 
 	it('does not call Cite.async for PMID inputs', async () => {
