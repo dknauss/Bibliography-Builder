@@ -94,6 +94,12 @@ async function requestFormattedEntries(cslItems, styleKey) {
 		throw new Error('Formatter response did not include entries.');
 	}
 
+	if (data.entries.length !== cslItems.length) {
+		throw new Error(
+			'Formatter response entry count did not match request.'
+		);
+	}
+
 	return data.entries.map((entry) => String(entry?.text || ''));
 }
 

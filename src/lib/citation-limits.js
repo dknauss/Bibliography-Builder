@@ -15,8 +15,9 @@ export function getBibliographyLimitExceededMessage(
 	const remaining = Math.max(limit - currentCount, 0);
 	const citationLabel = attemptedCount === 1 ? 'citation' : 'citations';
 	const slotLabel = remaining === 1 ? 'slot' : 'slots';
+	const slotVerb = remaining === 1 ? 'remains' : 'remain';
 
-	return `Adding ${attemptedCount} ${citationLabel} would exceed the supported limit of ${limit} citations per bibliography. ${remaining} ${slotLabel} remain; add fewer items or remove citations first.`;
+	return `Adding ${attemptedCount} ${citationLabel} would exceed the supported limit of ${limit} citations per bibliography. ${remaining} ${slotLabel} ${slotVerb}; add fewer items or remove citations first.`;
 }
 
 export function getBibliographyOverLimitMessage(

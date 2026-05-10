@@ -819,7 +819,7 @@ describe('Edit focus management', () => {
 		await userEvent.click(screen.getByRole('button', { name: 'Add' }));
 
 		expect(await screen.findByRole('status')).toHaveTextContent(
-			'Adding 2 citations would exceed the supported limit of 50 citations per bibliography. 1 slot remain; add fewer items or remove citations first.'
+			'Adding 2 citations would exceed the supported limit of 50 citations per bibliography. 1 slot remains; add fewer items or remove citations first.'
 		);
 		expect(formatBibliographyEntries).not.toHaveBeenCalled();
 		expect(screen.queryByText('New citation A')).not.toBeInTheDocument();

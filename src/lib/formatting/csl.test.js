@@ -199,6 +199,38 @@ describe('REST-backed citation formatting', () => {
 		expect(warnSpy).toHaveBeenCalled();
 	});
 
+	it('falls back and does not cache when the formatter response length mismatches the request', async () => {
+		const warnSpy = jest
+			.spyOn(console, 'warn')
+			.mockImplementation(() => {});
+		apiFetch
+			.mockResolvedValueOnce({
+				entries: [{ index: 0, text: 'Only one formatted entry' }],
+			})
+			.mockResolvedValueOnce({
+				entries: [
+					{ index: 0, text: 'Recovered first' },
+					{ index: 1, text: 'Recovered second' },
+				],
+			});
+
+		const cslItems = [
+			{ type: 'book', title: 'Fallback first' },
+			{ type: 'book', title: 'Fallback second' },
+		];
+
+		await expect(
+			formatBibliographyEntries(cslItems, 'apa-7')
+		).resolves.toEqual(['Fallback first', 'Fallback second']);
+
+		await expect(
+			formatBibliographyEntries(cslItems, 'apa-7')
+		).resolves.toEqual(['Recovered first', 'Recovered second']);
+
+		expect(apiFetch).toHaveBeenCalledTimes(2);
+		expect(warnSpy).toHaveBeenCalled();
+	});
+
 	it('falls back when the formatter response does not include an entries array', async () => {
 		const warnSpy = jest
 			.spyOn(console, 'warn')

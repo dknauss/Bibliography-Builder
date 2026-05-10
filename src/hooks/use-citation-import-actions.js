@@ -269,7 +269,9 @@ export function useCitationImportActions({
 			);
 			queueFocus({ type: 'notice' });
 		} finally {
-			setIsLoading(false);
+			if (isCurrentAsyncOperation(operationId)) {
+				setIsLoading(false);
+			}
 		}
 	}, [
 		announce,
