@@ -83,7 +83,7 @@ Use this checklist for live QA in the local Studio site.
 | Frontend render    | Bibliography list renders correctly                  | ☐      |
 | Frontend metadata  | JSON-LD and CSL-JSON script blocks present           | ☐      |
 | Frontend metadata  | COinS span present                                   | ☐      |
-| Frontend semantics | `doc-bibliography` / `doc-biblioentry` roles present | ☐      |
+| Frontend semantics | `doc-bibliography` section role present; no deprecated `doc-biblioentry` roles in newly saved entries | ☐      |
 | Frontend layout    | Long URLs wrap without overflow                      | ☐      |
 
 ## Notes

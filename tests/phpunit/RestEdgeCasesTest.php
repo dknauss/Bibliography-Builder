@@ -134,6 +134,19 @@ final class RestEdgeCasesTest extends TestCase {
 		$this->assertInstanceOf( WP_Error::class, $result );
 		$this->assertSame( 'bibliography_builder_pmid_not_found', $result->get_error_code() );
 		$this->assertSame( 404, $result->get_error_data()['status'] );
+
+		bibliography_builder_test_set_http_response(
+			array(
+				'response' => array( 'code' => 200 ),
+				'body'     => wp_json_encode( array( 'title' => 'Recovered title' ) ),
+			)
+		);
+
+		$cached = bibliography_builder_rest_resolve_pmid( $request );
+
+		$this->assertInstanceOf( WP_Error::class, $cached );
+		$this->assertSame( 'bibliography_builder_pmid_not_found', $cached->get_error_code() );
+		$this->assertCount( 1, bibliography_builder_test_get_http_requests() );
 	}
 
 	public function test_resolve_pmid_caches_404_responses(): void {
@@ -185,6 +198,20 @@ final class RestEdgeCasesTest extends TestCase {
 		$this->assertSame( 'bibliography_builder_pmid_upstream_error', $result->get_error_code() );
 		$this->assertSame( 502, $result->get_error_data()['status'] );
 		$this->assertSame( 500, $result->get_error_data()['upstream_status'] );
+
+		bibliography_builder_test_set_http_response(
+			array(
+				'response' => array( 'code' => 200 ),
+				'body'     => wp_json_encode( array( 'title' => 'Recovered title' ) ),
+			)
+		);
+
+		$cached = bibliography_builder_rest_resolve_pmid( $request );
+
+		$this->assertInstanceOf( WP_Error::class, $cached );
+		$this->assertSame( 'bibliography_builder_pmid_upstream_error', $cached->get_error_code() );
+		$this->assertSame( 500, $cached->get_error_data()['upstream_status'] );
+		$this->assertCount( 1, bibliography_builder_test_get_http_requests() );
 	}
 
 	public function test_resolve_pmid_returns_502_for_invalid_upstream_json(): void {

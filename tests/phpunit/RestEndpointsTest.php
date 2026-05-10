@@ -273,6 +273,18 @@ final class RestEndpointsTest extends TestCase {
 		$this->assertStringContainsString( 'id=26673779', $requests[0]['url'] );
 		$this->assertSame( 3, $requests[0]['args']['redirection'] );
 		$this->assertArrayNotHasKey( 'headers', $requests[0]['args'] );
+
+		bibliography_builder_test_set_http_response(
+			array(
+				'response' => array( 'code' => 404 ),
+				'body'     => '',
+			)
+		);
+
+		$cached = bibliography_builder_rest_resolve_pmid( $request );
+
+		$this->assertSame( $data, $cached->get_data() );
+		$this->assertCount( 1, bibliography_builder_test_get_http_requests() );
 	}
 
 	public function test_pmid_endpoint_caches_successful_csl_json(): void {

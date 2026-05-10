@@ -8,7 +8,8 @@ It is structured as a sequence of self-contained requirement tickets (REQ-*) gro
 
 - **Drafted:** 2026-05-07
 - **Revised:** 2026-05-07 — incorporated Codex review feedback (see revision history at bottom)
-- **State:** Ready for sprint planning
+- **Updated:** 2026-05-09
+- **State:** Sprints 1–2 implemented in code; JS lint, CSS lint, Jest, and production build verified locally on 2026-05-09 via a bootstrapped npm. PHP/Composer verification remains pending because the current desktop shell lacks PHP and Composer.
 - **Owner:** TBD
 - **Stakeholders:** Plugin maintainers, accessibility reviewer
 - **Canonical path:** `docs/planning/sort-conformance-plan.md`
@@ -76,10 +77,10 @@ A new test file runs a curated fixture set through `sortCitations` for every reg
 
 ### Acceptance criteria
 
-- [ ] Snapshot file generated and committed for all 9 currently-registered styles
-- [ ] `npm test -- src/lib/sorter.snapshot.test.js` passes on `main` before any other refactor begins
-- [ ] CI runs the snapshot suite on every PR
-- [ ] Documented in `docs/planning/sort-conformance-plan.md` as the baseline reference
+- [x] Snapshot file generated and committed for all 9 currently-registered styles
+- [x] `npm test -- src/lib/sorter.snapshot.test.js` passes on `main` before any other refactor begins
+- [x] CI runs the snapshot suite on every PR
+- [x] Documented in `docs/planning/sort-conformance-plan.md` as the baseline reference
 
 ### Files affected
 
@@ -141,9 +142,9 @@ export function sortCitations(citations, styleKey) {
 
 ### Acceptance criteria
 
-- [ ] Test: Two citations with identical author/year/title produce stable order across 10 repeated `sortCitations` calls
-- [ ] Test: Sort order is preserved across `JSON.stringify` / `JSON.parse` round-trip simulating attribute serialization
-- [ ] Existing snapshot tests (REQ-T1a) still pass
+- [x] Test: Two citations with identical author/year/title produce stable order across 10 repeated `sortCitations` calls
+- [x] Test: Sort order is preserved across `JSON.stringify` / `JSON.parse` round-trip simulating attribute serialization
+- [x] Existing snapshot tests (REQ-T1a) still pass
 
 ### Files affected
 
@@ -209,12 +210,12 @@ Visible URL text is preserved (sighted users still see the URL, which matches th
 
 ### Acceptance criteria
 
-- [ ] Unit test: `splitTextIntoLinkParts('See https://example.org/foo', { linkLabel: 'Some Title' })` returns a link segment with `label: 'Some Title'`
-- [ ] Unit test: omitting `linkLabel` falls back to no label (existing behavior preserved); the consumer in `save-markup.js` provides the `'Link to publication'` fallback at the render layer
-- [ ] Save output test: `save-markup.js` emits an `<a>` element with `aria-label` containing the citation title and the visible URL text
-- [ ] Save output test: when title is absent, `aria-label` falls back to container-title, then to the localized "Link to publication"
-- [ ] Save output test: voice-control label-in-name requirement is preserved — the accessible name includes the exact visible URL text
-- [ ] Editor preview behavior is **unchanged** — verified by existing `citation-entry-body.test.js` continuing to pass without modification
+- [x] Unit test: `splitTextIntoLinkParts('See https://example.org/foo', { linkLabel: 'Some Title' })` returns a link segment with `label: 'Some Title'`
+- [x] Unit test: omitting `linkLabel` falls back to no label (existing behavior preserved); the consumer in `save-markup.js` provides the `'Link to publication'` fallback at the render layer
+- [x] Save output test: `save-markup.js` emits an `<a>` element with `aria-label` containing the citation title and the visible URL text
+- [x] Save output test: when title is absent, `aria-label` falls back to container-title, then to the localized "Link to publication"
+- [x] Save output test: voice-control label-in-name requirement is preserved — the accessible name includes the exact visible URL text
+- [x] Editor preview behavior is **unchanged** — verified by existing `citation-entry-body.test.js` continuing to pass without modification
 - [ ] Manual screen reader verification on the saved frontend output: NVDA on Windows + VoiceOver on macOS announce the publication context along with the URL, and speech-input targetability remains acceptable — captured in `docs/a11y-audit-records/`
 
 ### Files affected
@@ -290,13 +291,13 @@ Newly inserted Bibliography blocks should start with a useful visible heading ma
 
 ### Acceptance criteria
 
-- [ ] Freshly inserted block (default Chicago Notes-Bibliography) has `headingText` set to `"Bibliography"`
-- [ ] Switching from default Chicago Notes-Bibliography to MLA, with the heading still untouched, updates the heading to `"Works Cited"`
-- [ ] User clearing the heading then switching style preserves the blank heading
-- [ ] User typing a custom heading then switching style preserves the custom text
-- [ ] Existing saved blocks with blank `headingText` do not gain new frontend output (verified via `parse-store-render.integration.test.js`)
+- [x] Freshly inserted block (default Chicago Notes-Bibliography) has `headingText` set to `"Bibliography"`
+- [x] Switching from default Chicago Notes-Bibliography to MLA, with the heading still untouched, updates the heading to `"Works Cited"`
+- [x] User clearing the heading then switching style preserves the blank heading
+- [x] User typing a custom heading then switching style preserves the custom text
+- [x] Existing saved blocks with blank `headingText` do not gain new frontend output (verified via `parse-store-render.integration.test.js`)
 - [ ] Block Accessibility Checker (BAC) heading-warning does not fire for a newly inserted default block once citations exist (manual verification step in QA matrix)
-- [ ] No `deprecated.js` migration is required (verified by running existing deprecated-handler tests)
+- [x] No `deprecated.js` migration is required (verified by running existing deprecated-handler tests)
 
 ### Files affected
 
@@ -349,12 +350,12 @@ Three coordinated additions:
 
 ### Acceptance criteria
 
-- [ ] `README.md` has a "Known limitations" section that explicitly mentions the OSCOLA grouping gap and links to this plan
-- [ ] `readme.txt` has equivalent WordPress.org-facing wording that explicitly mentions the OSCOLA grouping gap
-- [ ] `src/lib/formatting/style-registry.js` has an inline `// TODO(Epic-OSCOLA):` comment at the OSCOLA entry
-- [ ] Selecting OSCOLA in the inspector surfaces the limitation notice; dismissing it within the session does not re-show it for that block
-- [ ] No save-output behavior change
-- [ ] Snapshot tests unaffected
+- [x] `README.md` has a "Known limitations" section that explicitly mentions the OSCOLA grouping gap and links to this plan
+- [x] `readme.txt` has equivalent WordPress.org-facing wording that explicitly mentions the OSCOLA grouping gap
+- [x] `src/lib/formatting/style-registry.js` has an inline `// TODO(Epic-OSCOLA):` comment at the OSCOLA entry
+- [x] Selecting OSCOLA in the inspector surfaces the limitation notice; dismissing it within the session does not re-show it for that block
+- [x] No save-output behavior change
+- [x] Snapshot tests unaffected
 - [ ] When Epic-OSCOLA ships, this note is removed in the same PR (cross-reference recorded in Epic-OSCOLA's scope)
 
 ### Files affected
@@ -432,12 +433,12 @@ useEffect(() => {
 
 ### Acceptance criteria
 
-- [ ] All REQ-T1a snapshots pass (no behavior change for notes / author-date)
-- [ ] New test: IEEE-styled citation list of 5 entries passes through `sortCitations` unchanged
-- [ ] New test: Vancouver list of 5 entries passes through unchanged
-- [ ] New test: Switching style from numeric → author-date triggers sort on next attribute write
-- [ ] New test: Switching style from author-date → numeric does not re-sort entries already in place
-- [ ] No changes to public API of `sortCitations`
+- [x] All REQ-T1a snapshots pass (no behavior change for notes / author-date)
+- [x] New test: IEEE-styled citation list of 5 entries passes through `sortCitations` unchanged
+- [x] New test: Vancouver list of 5 entries passes through unchanged
+- [x] New test: Switching style from numeric → author-date triggers sort on next attribute write
+- [x] New test: Switching style from author-date → numeric does not re-sort entries already in place
+- [x] No changes to public API of `sortCitations`
 
 ### Files affected
 
@@ -530,13 +531,13 @@ This rule applies to `author-date` family only. The `notes` family preserves the
 
 ### Acceptance criteria
 
-- [ ] Test: Smith solo / Smith+Adams / Smith+Brown / Smith+Brown+Davis sort in expected order under author-date
-- [ ] Test: Same first author + same coauthor + different years → year breaks the tie correctly
-- [ ] Test: Same first author + same year + different coauthors → coauthor surname breaks tie
-- [ ] **Test: Two single-author works with the same family name but different given names ("Smith, Alice" vs "Smith, Bob") sort by given name, not collapse together**
-- [ ] Test: Corporate author (literal) does not collide with personal author of the same surname (verified via the `literal`-vs-`family` branch in `normalizeContributorKey`)
-- [ ] Test: Notes-family sort behavior unchanged (existing fixtures pass)
-- [ ] Snapshot diff is reviewed and approved as intentional
+- [x] Test: Smith solo / Smith+Adams / Smith+Brown / Smith+Brown+Davis sort in expected order under author-date
+- [x] Test: Same first author + same coauthor + different years → year breaks the tie correctly
+- [x] Test: Same first author + same year + different coauthors → coauthor surname breaks tie
+- [x] **Test: Two single-author works with the same family name but different given names ("Smith, Alice" vs "Smith, Bob") sort by given name, not collapse together**
+- [x] Test: Corporate author (literal) does not collide with personal author of the same surname (verified via the `literal`-vs-`family` branch in `normalizeContributorKey`)
+- [x] Test: Notes-family sort behavior unchanged (existing fixtures pass)
+- [x] Snapshot diff is reviewed and approved as intentional
 
 ### Files affected
 
@@ -599,13 +600,13 @@ Decision: **defer entirely.** Tracked as REQ-B5 in the backlog. Revisit only if 
 
 ### Acceptance criteria
 
-- [ ] IEEE list: up/down arrows render on each entry; first entry's up is disabled; last entry's down is disabled
-- [ ] Author-date list: arrows do not render; keyboard shortcuts inactive
-- [ ] Click up/down: entries swap; attribute write occurs; focus stays on the moved entry
-- [ ] Keyboard `Alt+ArrowUp`/`Alt+ArrowDown` performs the same swaps
+- [x] IEEE list: up/down arrows render on each entry; first entry's up is disabled; last entry's down is disabled
+- [x] Author-date list: arrows do not render; keyboard shortcuts inactive
+- [x] Click up/down: entries swap; attribute write occurs; focus stays on the moved entry
+- [x] Keyboard `Alt+ArrowUp`/`Alt+ArrowDown` performs the same swaps
 - [ ] Screen reader announces position changes (manual a11y verification)
-- [ ] After reorder, save and reload editor: order persists
-- [ ] Numeric insertion order is not changed or clobbered; `sortCitations` may still be called, but it must behave as a no-op for numeric-family styles
+- [x] After reorder, save and reload editor: order persists
+- [x] Numeric insertion order is not changed or clobbered; `sortCitations` may still be called, but it must behave as a no-op for numeric-family styles
 
 ### Files affected
 
@@ -760,13 +761,13 @@ Recommendation: implement Strategy A, since it handles all current and future co
 
 ### Acceptance criteria
 
-- [ ] `BIBLIOGRAPHY_CACHE` (or equivalent) replaces `FORMAT_CACHE`; cache key includes the full ordered item list
-- [ ] Existing tests in `src/lib/formatting/csl.test.js` pass after key-shape adaptation
-- [ ] LRU eviction tests in `src/lib/formatting/csl.runtime.test.js` pass after key-shape adaptation
-- [ ] New test: adding Smith 2020 "Beta" to a bibliography containing Smith 2020 "Alpha" produces both formatted strings reflecting whatever suffix assignment citeproc-php emits (test uses real or mocked PHP formatter — see Test plan)
-- [ ] New test: reordering entries invalidates cache and produces fresh formatted output
-- [ ] New test: changing style or locale invalidates cache
-- [ ] New test: add/manual/edit/delete/style-change mutation paths pass the full current bibliography into formatting and update all affected `formattedText` values for suffix-sensitive styles
+- [x] `BIBLIOGRAPHY_CACHE` (or equivalent) replaces `FORMAT_CACHE`; cache key includes the full ordered item list
+- [x] Existing tests in `src/lib/formatting/csl.test.js` pass after key-shape adaptation
+- [x] LRU eviction tests in `src/lib/formatting/csl.runtime.test.js` pass after key-shape adaptation
+- [x] New test: adding Smith 2020 "Beta" to a bibliography containing Smith 2020 "Alpha" produces both formatted strings reflecting whatever suffix assignment citeproc-php emits (test uses real or mocked PHP formatter — see Test plan)
+- [x] New test: reordering entries invalidates cache and produces fresh formatted output
+- [x] New test: changing style or locale invalidates cache
+- [x] New test: add/manual/edit/delete/style-change mutation paths pass the full current bibliography into formatting and update all affected `formattedText` values for suffix-sensitive styles
 - [ ] New test: deleting one item from a same-author/same-year group reformats the remaining entries so obsolete suffixes are removed or adjusted
 - [ ] No regression in editor performance for typical bibliography sizes (≤50 entries) — measured via `src/benchmarks/performance-benchmark.test.js` extension
 - [ ] **Cache-miss benchmark target:** adding one entry to a 50-entry bibliography in a context-sensitive style (e.g., Chicago Author-Date) completes the resulting full re-format and attribute write within 500 ms on the benchmark hardware baseline. Bibliography-batch caching invalidates the whole cache on every mutation, so cache-miss latency — not cache-hit latency — is the realistic editor-experience bound. If the budget is exceeded, escalate to Strategy B (numeric-only retains per-item cache) or document the regression for stakeholder review before merging.
