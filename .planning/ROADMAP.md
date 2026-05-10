@@ -685,8 +685,11 @@ Plans:
     no JS required for the readable bibliography itself; no regression in
     plugin-deactivation resilience or static-save contract.
 -   **Depends on:** Phase 3 released.
--   **Plans:** TBD.
+-   **Plans:** 4 plans.
 
 Plans:
 
--   [ ] TBD
+-   [ ] 04-01-PLAN.md — foundation: outputCiteExport attribute, cslToRisEntry export, deprecated entry
+-   [ ] 04-02-PLAN.md — save markup: <details> disclosure panels with RIS/CSL-JSON/BibTeX/BibLaTeX data URI links
+-   [ ] 04-03-PLAN.md — editor pre-computation of BibTeX and BibLaTeX per-citation export strings
+-   [ ] 04-04-PLAN.md — CSS reset for hanging-indent, editor inspector toggle, human verification
