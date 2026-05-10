@@ -165,7 +165,8 @@ final class RestEndpointsTest extends TestCase {
 			),
 		);
 		$style_key = 'apa-7';
-		$cache_key = bibliography_builder_get_formatter_cache_key( $csl_items, $style_key );
+		$style     = bibliography_builder_get_formatter_style_definition( $style_key );
+		$cache_key = bibliography_builder_get_formatter_cache_key( $csl_items, $style_key, $style );
 
 		wp_cache_set(
 			$cache_key,
@@ -206,6 +207,7 @@ final class RestEndpointsTest extends TestCase {
 			),
 		);
 		$style_key = 'chicago-author-date';
+		$style     = bibliography_builder_get_formatter_style_definition( $style_key );
 
 		$request = new WP_REST_Request( 'POST', '/bibliography/v1/format' );
 		$request->set_body_params(
@@ -216,7 +218,7 @@ final class RestEndpointsTest extends TestCase {
 		);
 
 		$response = bibliography_builder_rest_format_citations( $request );
-		$cache_key = bibliography_builder_get_formatter_cache_key( $csl_items, $style_key );
+		$cache_key = bibliography_builder_get_formatter_cache_key( $csl_items, $style_key, $style );
 		$cached    = wp_cache_get( $cache_key, BIBLIOGRAPHY_BUILDER_FORMAT_CACHE_GROUP );
 
 		$this->assertInstanceOf( WP_REST_Response::class, $response );
