@@ -75,7 +75,9 @@ describe('BAC check logic', () => {
 
 		it('fires when citations is missing', () => {
 			expect(
-				getCheck('empty_bibliography').test(makeAttributes({ citations: undefined }))
+				getCheck('empty_bibliography').test(
+					makeAttributes({ citations: undefined })
+				)
 			).toBe(true);
 		});
 
@@ -96,7 +98,10 @@ describe('BAC check logic', () => {
 		it('fires when citations exist but headingText is empty', () => {
 			expect(
 				getCheck('heading_missing').test(
-					makeAttributes({ citations: [{ title: 'Test' }], headingText: '' })
+					makeAttributes({
+						citations: [{ title: 'Test' }],
+						headingText: '',
+					})
 				)
 			).toBe(true);
 		});
@@ -114,7 +119,9 @@ describe('BAC check logic', () => {
 
 		it('does not fire when block is empty', () => {
 			expect(
-				getCheck('heading_missing').test(makeAttributes({ citations: [] }))
+				getCheck('heading_missing').test(
+					makeAttributes({ citations: [] })
+				)
 			).toBe(false);
 		});
 
@@ -149,7 +156,10 @@ describe('BAC check logic', () => {
 				getCheck('raw_url_link_text').test(
 					makeAttributes({
 						citations: [
-							{ URL: 'https://example.com', title: 'https://example.com' },
+							{
+								URL: 'https://example.com',
+								title: 'https://example.com',
+							},
 						],
 					})
 				)
@@ -160,7 +170,9 @@ describe('BAC check logic', () => {
 			expect(
 				getCheck('raw_url_link_text').test(
 					makeAttributes({
-						citations: [{ URL: 'https://example.com', title: 'My Paper' }],
+						citations: [
+							{ URL: 'https://example.com', title: 'My Paper' },
+						],
 					})
 				)
 			).toBe(false);
@@ -168,7 +180,9 @@ describe('BAC check logic', () => {
 
 		it('does not fire when citations array is empty', () => {
 			expect(
-				getCheck('raw_url_link_text').test(makeAttributes({ citations: [] }))
+				getCheck('raw_url_link_text').test(
+					makeAttributes({ citations: [] })
+				)
 			).toBe(false);
 		});
 

@@ -716,7 +716,7 @@ function bibliography_builder_get_cached_pmid_result( $pmid ) {
 	}
 
 	if ( isset( $cached['value']['type'] ) && 'error' === $cached['value']['type'] ) {
-		$error_code = isset( $cached['value']['code'] )
+		$error_code    = isset( $cached['value']['code'] )
 			? (string) $cached['value']['code']
 			: 'bibliography_builder_pmid_upstream_error';
 		$error_message = isset( $cached['value']['message'] )
