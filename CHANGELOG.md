@@ -9,6 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No changes yet.
 
+## [1.4.0] - 2026-05-10
+
+### Added
+
+- Block Accessibility Checks (BAC) optional compatibility layer: soft-detects the Block Accessibility Checks plugin and registers four editor checks (empty bibliography, missing heading, raw URL link text, all metadata outputs disabled). Borges continues to work normally when BAC is absent.
+- Stable `bibliographyId` block attribute and per-citation `id` field — groundwork for the writable bibliography REST API (M0).
+
+### Changed
+
+- Harden E2E plugin-row locator in Playwright specs to exclude WordPress update notice rows, fixing Playwright strict-mode violations in CI.
+- Regenerate POT with 81 msgid entries (up from 41); new strings include PHP formatter/PMID error messages, BAC check strings, BibLaTeX export labels, and citation reorder controls.
+- Extend `generate_brand_assets.py` with `--locale` and `--all-locales` flags for generating localised WordPress.org banner variants.
+
+### Docs
+
+- Add `docs/i18n-process.md`: POT regeneration, MO compilation, JS JSON artifact guide, bundled-vs-official pack policy.
+- Add `docs/a11y-audit-records/1.3.1.md`: Tier 1 and Tier 2 accessibility audit record; all automated checks green.
+- Add `.planning/phases/05-writable-bibliography-rest/05-DESIGN-MEMO.md`: five-tier writable REST API design with ETag concurrency, capability matrix, and companion-plugin recommendation.
+
 ## [1.3.1] - 2026-05-10
 
 ### Added

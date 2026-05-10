@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/paypalme/DanKnauss
 Tags: bibliography, citation, doi, bibtex, academic
 Requires at least: 6.4
 Tested up to: 7.0
-Stable tag: 1.3.1
+Stable tag: 1.4.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -132,6 +132,12 @@ PubMed/PMID input connects through the plugin's authenticated WordPress REST pro
 * NLM Web Policies: https://www.nlm.nih.gov/web_policies.html
 
 == Changelog ==
+
+= 1.4.0 =
+* Add optional Block Accessibility Checks compatibility: soft-detects the BAC plugin and registers four editor checks (empty bibliography, missing heading, raw URL link text, all metadata disabled). Borges works normally when BAC is absent.
+* Harden Playwright E2E plugin-row locator to exclude WordPress update notice rows, fixing CI strict-mode violations.
+* Regenerate translation template (POT) with 81 strings, up from 41; covers PHP error messages, BAC check strings, BibLaTeX export labels, and citation reorder controls.
+* Extend banner generation script with locale and RTL support flags.
 
 = 1.3.1 =
 * Raise per-bibliography hard cap from 50 to 200 citations. Bibliographies between 100 and 199 citations now show a dismissible editor notice warning about potential formatting slowness on shared hosting. The per-paste limit (50 entries) is unchanged.
