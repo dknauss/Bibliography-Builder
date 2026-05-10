@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Bibliography 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/dknauss/borges-bibliography-builder/issues\n"
 "POT-Creation-Date: 2026-04-08 00:00+0000\n"
-"PO-Revision-Date: 2026-04-08 00:00+0000\n"
-"Last-Translator: Dan Knauss <dan@newlocalmedia.com>\n"
+"PO-Revision-Date: 2026-05-10 00:00+0000\n"
+"Last-Translator: Borges Bibliography Builder contributors\n"
 "Language: ru_RU\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgid "Imported metadata may be incomplete. Verify before publishing."
 msgstr "Импортированные метаданные могут быть неполными. Проверьте их перед публикацией."
 
 msgid "Add citations"
-msgstr "Добавить цитаты"
+msgstr "Добавить источники"
 
 msgid "Paste / Import"
 msgstr "Вставить / Импортировать"
@@ -29,7 +29,7 @@ msgid "Add DOI(s), BibTeX entries, and citations in supported styles for books, 
 msgstr "Добавляйте DOI, записи BibTeX и цитаты в поддерживаемых стилях для книг, статей, глав и веб-страниц. Разделяйте несколько отформатированных цитат пустой строкой."
 
 msgid "Resolving…"
-msgstr "Обработка…"
+msgstr "Запрос…"
 
 msgid "Add"
 msgstr "Добавить"
@@ -44,7 +44,7 @@ msgid "Title"
 msgstr "Название"
 
 msgid "Container"
-msgstr "Контейнер"
+msgstr "Издание"
 
 msgid "Publisher"
 msgstr "Издатель"
@@ -74,43 +74,43 @@ msgid "source"
 msgstr "источник"
 
 msgid "sources"
-msgstr "источники"
+msgstr "источника"
 
 msgid "Citation Style"
 msgstr "Стиль цитирования"
 
 msgid "Changing styles reformats auto-generated citations and keeps manual overrides intact."
-msgstr "Смена стиля переформатирует автоматически созданные цитаты и сохраняет ручные переопределения."
+msgstr "Смена стиля переформатирует автоматически сгенерированные цитаты и сохраняет ручные правки."
 
 msgid "Visible Heading"
 msgstr "Видимый заголовок"
 
 msgid "Optional heading shown above the bibliography on the site front end when at least one citation exists."
-msgstr "Необязательный заголовок, отображаемый над библиографией на сайте, если существует хотя бы одна цитата."
+msgstr "Необязательный заголовок, отображаемый над библиографией на сайте при наличии хотя бы одного источника."
 
 msgid "Output JSON-LD"
-msgstr "Выводить JSON-LD"
+msgstr "Включить JSON-LD"
 
 msgid "Helps search engines and other tools understand the bibliography."
-msgstr "Помогает поисковым системам и другим инструментам понимать библиографию."
+msgstr "Помогает поисковым системам и другим инструментам распознавать библиографию."
 
 msgid "Output COinS"
-msgstr "Выводить COinS"
+msgstr "Включить COinS"
 
 msgid "Lets Zotero and similar tools detect citations on the page."
-msgstr "Позволяет Zotero и похожим инструментам обнаруживать цитаты на странице."
+msgstr "Позволяет Zotero и аналогичным инструментам обнаруживать цитаты на странице."
 
 msgid "Output CSL-JSON"
-msgstr "Выводить CSL-JSON"
+msgstr "Включить CSL-JSON"
 
 msgid "Makes citation data reusable by scholarly tools and services."
-msgstr "Делает данные цитирования пригодными для повторного использования научными инструментами и сервисами."
+msgstr "Делает данные цитирования доступными для повторного использования в научных инструментах и сервисах."
 
 msgid "Exports"
 msgstr "Экспорт"
 
 msgid "Copy bibliography"
-msgstr "Копировать библиографию"
+msgstr "Скопировать библиографию"
 
 msgid "Copies the current bibliography as plain text in the current order and style."
 msgstr "Копирует текущую библиографию как обычный текст в текущем порядке и стиле."
@@ -125,7 +125,7 @@ msgid "Download BibTeX"
 msgstr "Скачать BibTeX"
 
 msgid "Downloads the current bibliography as BibTeX for reference-manager and scholarly-writing workflows."
-msgstr "Скачивает текущую библиографию как BibTeX для менеджеров ссылок и научных рабочих процессов."
+msgstr "Скачивает текущую библиографию как BibTeX для менеджеров ссылок и научно-исследовательских рабочих процессов."
 
 msgid "Download RIS"
 msgstr "Скачать RIS"
@@ -161,7 +161,7 @@ msgid "Post ID to inspect for bibliography blocks."
 msgstr "ID записи для проверки на наличие блоков библиографии."
 
 msgid "Zero-based bibliography block index within the post."
-msgstr "Индекс блока библиографии внутри записи, начинающийся с нуля."
+msgstr "Индекс блока библиографии внутри записи (нумерация с нуля)."
 
 msgid "Response format: json, text, or csl-json."
 msgstr "Формат ответа: json, text или csl-json."

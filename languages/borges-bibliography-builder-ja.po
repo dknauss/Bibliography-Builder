@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Bibliography 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/dknauss/borges-bibliography-builder/issues\n"
 "POT-Creation-Date: 2026-04-08 00:00+0000\n"
-"PO-Revision-Date: 2026-04-08 00:00+0000\n"
-"Last-Translator: Dan Knauss <dan@newlocalmedia.com>\n"
+"PO-Revision-Date: 2026-05-10 00:00+0000\n"
+"Last-Translator: Borges Bibliography Builder contributors\n"
 "Language: ja\n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Domain: borges-bibliography-builder\n"
 
 msgid "Imported metadata may be incomplete. Verify before publishing."
-msgstr "インポートしたメタデータは不完全な場合があります。公開前に確認してください。"
+msgstr "インポートしたメタデータは不完全な場合があります。公開前にご確認ください。"
 
 msgid "Add citations"
 msgstr "引用を追加"
@@ -26,10 +26,10 @@ msgid "Manual Entry"
 msgstr "手動入力"
 
 msgid "Add DOI(s), BibTeX entries, and citations in supported styles for books, articles, chapters, and webpages. Separate multiple formatted citations with a blank line."
-msgstr "書籍、論文、章、ウェブページ向けの対応スタイルで DOI、BibTeX エントリー、引用を追加します。複数の整形済み引用は空行で区切ってください。"
+msgstr "書籍、論文、章、ウェブページ向けの対応スタイルで DOI、BibTeX エントリー、引用を追加できます。複数の整形済み引用は空行で区切ってください。"
 
 msgid "Resolving…"
-msgstr "処理中…"
+msgstr "解決中…"
 
 msgid "Add"
 msgstr "追加"
@@ -62,7 +62,7 @@ msgid "URL"
 msgstr "URL"
 
 msgid "Hide citation form"
-msgstr "引用フォームを隠す"
+msgstr "引用フォームを非表示"
 
 msgid "Show citation form"
 msgstr "引用フォームを表示"
@@ -71,28 +71,28 @@ msgid "Settings"
 msgstr "設定"
 
 msgid "source"
-msgstr "ソース"
+msgstr "件"
 
 msgid "sources"
-msgstr "ソース"
+msgstr "件"
 
 msgid "Citation Style"
 msgstr "引用スタイル"
 
 msgid "Changing styles reformats auto-generated citations and keeps manual overrides intact."
-msgstr "スタイルを変更すると自動生成された引用は再整形され、手動の上書きは保持されます。"
+msgstr "スタイルを変更すると自動生成された引用は再整形され、手動で変更した内容は保持されます。"
 
 msgid "Visible Heading"
 msgstr "表示見出し"
 
 msgid "Optional heading shown above the bibliography on the site front end when at least one citation exists."
-msgstr "少なくとも 1 件の引用がある場合に、サイトのフロントエンドで参考文献の上に表示される任意の見出しです。"
+msgstr "引用が 1 件以上ある場合に、サイトのフロントエンドで参考文献リストの上に表示される任意の見出しです。"
 
 msgid "Output JSON-LD"
 msgstr "JSON-LD を出力"
 
 msgid "Helps search engines and other tools understand the bibliography."
-msgstr "検索エンジンや他のツールが参考文献を理解するのに役立ちます。"
+msgstr "検索エンジンや他のツールが参考文献を解釈するのに役立ちます。"
 
 msgid "Output COinS"
 msgstr "COinS を出力"
@@ -125,22 +125,22 @@ msgid "Download BibTeX"
 msgstr "BibTeX をダウンロード"
 
 msgid "Downloads the current bibliography as BibTeX for reference-manager and scholarly-writing workflows."
-msgstr "現在の参考文献を、文献管理や学術執筆ワークフロー向けの BibTeX としてダウンロードします。"
+msgstr "現在の参考文献を、文献管理・学術執筆ワークフロー向けの BibTeX としてダウンロードします。"
 
 msgid "Download RIS"
 msgstr "RIS をダウンロード"
 
 msgid "Downloads the current bibliography as RIS for citation managers and import/export workflows."
-msgstr "現在の参考文献を、引用管理やインポート/エクスポート向けの RIS としてダウンロードします。"
+msgstr "現在の参考文献を、文献管理ツールやインポート・エクスポート向けの RIS としてダウンロードします。"
 
 msgid "Notification"
 msgstr "通知"
 
 msgid "Publication Type"
-msgstr "出版物の種類"
+msgstr "資料種別"
 
 msgid "Select a publication type"
-msgstr "出版物の種類を選択"
+msgstr "資料種別を選択"
 
 msgid "Save"
 msgstr "保存"
@@ -158,10 +158,10 @@ msgid "Bibliography block not found for the requested index."
 msgstr "指定されたインデックスの参考文献ブロックが見つかりません。"
 
 msgid "Post ID to inspect for bibliography blocks."
-msgstr "参考文献ブロックを調べる投稿 ID。"
+msgstr "参考文献ブロックを検索する投稿 ID。"
 
 msgid "Zero-based bibliography block index within the post."
-msgstr "投稿内の 0 始まりの参考文献ブロック番号。"
+msgstr "投稿内の参考文献ブロックの 0 始まりのインデックス。"
 
 msgid "Response format: json, text, or csl-json."
 msgstr "応答形式: json、text、または csl-json。"

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Bibliography 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/dknauss/borges-bibliography-builder/issues\n"
 "POT-Creation-Date: 2026-04-08 00:00+0000\n"
-"PO-Revision-Date: 2026-04-08 00:00+0000\n"
-"Last-Translator: Dan Knauss <dan@newlocalmedia.com>\n"
+"PO-Revision-Date: 2026-05-10 00:00+0000\n"
+"Last-Translator: Borges Bibliography Builder contributors\n"
 "Language: bn_BD\n"
 "Language-Team: Bengali\n"
 "MIME-Version: 1.0\n"
@@ -23,13 +23,13 @@ msgid "Paste / Import"
 msgstr "পেস্ট / আমদানি"
 
 msgid "Manual Entry"
-msgstr "ম্যানুয়াল এন্ট্রি"
+msgstr "হস্তচালিত প্রবিষ্টি"
 
 msgid "Add DOI(s), BibTeX entries, and citations in supported styles for books, articles, chapters, and webpages. Separate multiple formatted citations with a blank line."
-msgstr "বই, প্রবন্ধ, অধ্যায় এবং ওয়েবপেজের জন্য সমর্থিত শৈলীতে DOI, BibTeX এন্ট্রি এবং উদ্ধৃতি যোগ করুন। একাধিক বিন্যাসকৃত উদ্ধৃতিকে ফাঁকা লাইনে আলাদা করুন।"
+msgstr "বই, প্রবন্ধ, অধ্যায় এবং ওয়েবপেজের জন্য সমর্থিত শৈলীতে DOI, BibTeX প্রবিষ্টি এবং উদ্ধৃতি যোগ করুন। একাধিক বিন্যাসিত উদ্ধৃতি ফাঁকা লাইনে আলাদা করুন।"
 
 msgid "Resolving…"
-msgstr "প্রক্রিয়াকরণ…"
+msgstr "DOI নিষ্পত্তি হচ্ছে…"
 
 msgid "Add"
 msgstr "যোগ করুন"
@@ -44,7 +44,7 @@ msgid "Title"
 msgstr "শিরোনাম"
 
 msgid "Container"
-msgstr "কনটেইনার"
+msgstr "প্রকাশ মাধ্যম"
 
 msgid "Publisher"
 msgstr "প্রকাশক"
@@ -74,46 +74,46 @@ msgid "source"
 msgstr "উৎস"
 
 msgid "sources"
-msgstr "উৎসসমূহ"
+msgstr "উৎস"
 
 msgid "Citation Style"
 msgstr "উদ্ধৃতি শৈলী"
 
 msgid "Changing styles reformats auto-generated citations and keeps manual overrides intact."
-msgstr "শৈলী পরিবর্তন করলে স্বয়ংক্রিয়ভাবে তৈরি উদ্ধৃতিগুলি পুনরায় বিন্যাসিত হয় এবং ম্যানুয়াল পরিবর্তন অপরিবর্তিত থাকে।"
+msgstr "শৈলী পরিবর্তন করলে স্বয়ংক্রিয়ভাবে তৈরি উদ্ধৃতিগুলি পুনরায় বিন্যাসিত হয়; হস্তচালিত পরিবর্তন অপরিবর্তিত থাকে।"
 
 msgid "Visible Heading"
 msgstr "দৃশ্যমান শিরোনাম"
 
 msgid "Optional heading shown above the bibliography on the site front end when at least one citation exists."
-msgstr "অন্তত একটি উদ্ধৃতি থাকলে সাইটের ফ্রন্টএন্ডে গ্রন্থপঞ্জির উপরে প্রদর্শিত ঐচ্ছিক শিরোনাম।"
+msgstr "অন্তত একটি উদ্ধৃতি থাকলে সাইটের সামনের অংশে গ্রন্থপঞ্জির উপরে প্রদর্শিত ঐচ্ছিক শিরোনাম।"
 
 msgid "Output JSON-LD"
 msgstr "JSON-LD আউটপুট"
 
 msgid "Helps search engines and other tools understand the bibliography."
-msgstr "এটি সার্চ ইঞ্জিন ও অন্যান্য টুলকে গ্রন্থপঞ্জি বুঝতে সাহায্য করে।"
+msgstr "সার্চ ইঞ্জিন ও অন্যান্য সরঞ্জামকে গ্রন্থপঞ্জি বুঝতে সাহায্য করে।"
 
 msgid "Output COinS"
 msgstr "COinS আউটপুট"
 
 msgid "Lets Zotero and similar tools detect citations on the page."
-msgstr "এটি Zotero ও অনুরূপ টুলকে পাতায় উদ্ধৃতি শনাক্ত করতে দেয়।"
+msgstr "Zotero ও অনুরূপ সরঞ্জামকে পাতায় উদ্ধৃতি শনাক্ত করতে দেয়।"
 
 msgid "Output CSL-JSON"
 msgstr "CSL-JSON আউটপুট"
 
 msgid "Makes citation data reusable by scholarly tools and services."
-msgstr "এটি উদ্ধৃতি ডেটাকে একাডেমিক টুল ও সেবার জন্য পুনর্ব্যবহারযোগ্য করে তোলে।"
+msgstr "উদ্ধৃতি ডেটাকে শিক্ষায়তনিক সরঞ্জাম ও সেবার জন্য পুনর্ব্যবহারযোগ্য করে তোলে।"
 
 msgid "Exports"
-msgstr "এক্সপোর্ট"
+msgstr "রপ্তানি"
 
 msgid "Copy bibliography"
-msgstr "গ্রন্থপঞ্জি কপি করুন"
+msgstr "গ্রন্থপঞ্জি অনুলিপি করুন"
 
 msgid "Copies the current bibliography as plain text in the current order and style."
-msgstr "বর্তমান ক্রম ও শৈলীতে বর্তমান গ্রন্থপঞ্জিকে সাধারণ লেখ্যরূপে কপি করে।"
+msgstr "বর্তমান ক্রম ও শৈলীতে বর্তমান গ্রন্থপঞ্জিকে সরল পাঠ্যরূপে অনুলিপি করে।"
 
 msgid "Download CSL-JSON"
 msgstr "CSL-JSON ডাউনলোড করুন"
@@ -125,13 +125,13 @@ msgid "Download BibTeX"
 msgstr "BibTeX ডাউনলোড করুন"
 
 msgid "Downloads the current bibliography as BibTeX for reference-manager and scholarly-writing workflows."
-msgstr "রেফারেন্স ম্যানেজার ও একাডেমিক লেখার কর্মপ্রবাহের জন্য বর্তমান গ্রন্থপঞ্জিকে BibTeX হিসেবে ডাউনলোড করে।"
+msgstr "তথ্যসূত্র ব্যবস্থাপক ও গবেষণামূলক লেখার কর্মপ্রবাহের জন্য বর্তমান গ্রন্থপঞ্জিকে BibTeX হিসেবে ডাউনলোড করে।"
 
 msgid "Download RIS"
 msgstr "RIS ডাউনলোড করুন"
 
 msgid "Downloads the current bibliography as RIS for citation managers and import/export workflows."
-msgstr "উদ্ধৃতি ম্যানেজার ও আমদানি/রপ্তানি কর্মপ্রবাহের জন্য বর্তমান গ্রন্থপঞ্জিকে RIS হিসেবে ডাউনলোড করে।"
+msgstr "উদ্ধৃতি ব্যবস্থাপক ও আমদানি/রপ্তানি কর্মপ্রবাহের জন্য বর্তমান গ্রন্থপঞ্জিকে RIS হিসেবে ডাউনলোড করে।"
 
 msgid "Notification"
 msgstr "বিজ্ঞপ্তি"
@@ -152,13 +152,13 @@ msgid "Post not found."
 msgstr "পোস্ট পাওয়া যায়নি।"
 
 msgid "Sorry, you are not allowed to read this bibliography."
-msgstr "দুঃখিত, আপনি এই গ্রন্থপঞ্জি পড়ার অনুমতি পাননি।"
+msgstr "দুঃখিত, এই গ্রন্থপঞ্জি পড়ার অনুমতি আপনার নেই।"
 
 msgid "Bibliography block not found for the requested index."
 msgstr "চাওয়া সূচকের জন্য গ্রন্থপঞ্জি ব্লক পাওয়া যায়নি।"
 
 msgid "Post ID to inspect for bibliography blocks."
-msgstr "গ্রন্থপঞ্জি ব্লক পরীক্ষা করার জন্য পোস্ট ID।"
+msgstr "গ্রন্থপঞ্জি ব্লক পরীক্ষার জন্য পোস্ট ID।"
 
 msgid "Zero-based bibliography block index within the post."
 msgstr "পোস্টের মধ্যে শূন্য-ভিত্তিক গ্রন্থপঞ্জি ব্লক সূচক।"

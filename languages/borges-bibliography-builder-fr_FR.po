@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Bibliography 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/dknauss/borges-bibliography-builder/issues\n"
 "POT-Creation-Date: 2026-04-08 00:00+0000\n"
-"PO-Revision-Date: 2026-04-08 00:00+0000\n"
-"Last-Translator: Dan Knauss <dan@newlocalmedia.com>\n"
+"PO-Revision-Date: 2026-05-10 00:00+0000\n"
+"Last-Translator: Borges Bibliography Builder contributors\n"
 "Language: fr_FR\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgid "Add DOI(s), BibTeX entries, and citations in supported styles for books, 
 msgstr "Ajoutez des DOI, des entrées BibTeX et des citations dans des styles pris en charge pour les livres, articles, chapitres et pages web. Séparez plusieurs citations formatées par une ligne vide."
 
 msgid "Resolving…"
-msgstr "Résolution…"
+msgstr "Résolution en cours…"
 
 msgid "Add"
 msgstr "Ajouter"
@@ -44,7 +44,7 @@ msgid "Title"
 msgstr "Titre"
 
 msgid "Container"
-msgstr "Conteneur"
+msgstr "Publication contenante"
 
 msgid "Publisher"
 msgstr "Éditeur"
@@ -80,19 +80,19 @@ msgid "Citation Style"
 msgstr "Style de citation"
 
 msgid "Changing styles reformats auto-generated citations and keeps manual overrides intact."
-msgstr "Le changement de style reformate les citations générées automatiquement et conserve les remplacements manuels."
+msgstr "Le changement de style reformate les citations générées automatiquement et conserve les modifications manuelles."
 
 msgid "Visible Heading"
 msgstr "Titre visible"
 
 msgid "Optional heading shown above the bibliography on the site front end when at least one citation exists."
-msgstr "Titre facultatif affiché au-dessus de la bibliographie sur le site lorsqu’au moins une citation existe."
+msgstr "Titre facultatif affiché au-dessus de la bibliographie sur le site lorsqu'au moins une citation existe."
 
 msgid "Output JSON-LD"
 msgstr "Produire du JSON-LD"
 
 msgid "Helps search engines and other tools understand the bibliography."
-msgstr "Aide les moteurs de recherche et d’autres outils à comprendre la bibliographie."
+msgstr "Aide les moteurs de recherche et d'autres outils à comprendre la bibliographie."
 
 msgid "Output COinS"
 msgstr "Produire des COinS"
@@ -113,7 +113,7 @@ msgid "Copy bibliography"
 msgstr "Copier la bibliographie"
 
 msgid "Copies the current bibliography as plain text in the current order and style."
-msgstr "Copie la bibliographie actuelle en texte brut dans l’ordre et le style actuels."
+msgstr "Copie la bibliographie actuelle en texte brut dans l'ordre et le style actuels."
 
 msgid "Download CSL-JSON"
 msgstr "Télécharger le CSL-JSON"
@@ -131,7 +131,7 @@ msgid "Download RIS"
 msgstr "Télécharger le RIS"
 
 msgid "Downloads the current bibliography as RIS for citation managers and import/export workflows."
-msgstr "Télécharge la bibliographie actuelle en RIS pour les gestionnaires de citations et les flux d’import/export."
+msgstr "Télécharge la bibliographie actuelle en RIS pour les gestionnaires de citations et les flux d'import/export."
 
 msgid "Notification"
 msgstr "Notification"
@@ -152,10 +152,10 @@ msgid "Post not found."
 msgstr "Publication introuvable."
 
 msgid "Sorry, you are not allowed to read this bibliography."
-msgstr "Désolé, vous n’êtes pas autorisé à lire cette bibliographie."
+msgstr "Désolé, vous n'êtes pas autorisé à lire cette bibliographie."
 
 msgid "Bibliography block not found for the requested index."
-msgstr "Bloc de bibliographie introuvable pour l’index demandé."
+msgstr "Bloc de bibliographie introuvable pour l'index demandé."
 
 msgid "Post ID to inspect for bibliography blocks."
 msgstr "ID de la publication à inspecter pour les blocs de bibliographie."
@@ -164,4 +164,4 @@ msgid "Zero-based bibliography block index within the post."
 msgstr "Index de bloc de bibliographie basé sur zéro dans la publication."
 
 msgid "Response format: json, text, or csl-json."
-msgstr "Format de réponse : json, text ou csl-json."
+msgstr "Format de réponse : json, text ou csl-json."

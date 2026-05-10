@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Bibliography 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/dknauss/borges-bibliography-builder/issues\n"
 "POT-Creation-Date: 2026-04-08 00:00+0000\n"
-"PO-Revision-Date: 2026-04-08 00:00+0000\n"
-"Last-Translator: Dan Knauss <dan@newlocalmedia.com>\n"
+"PO-Revision-Date: 2026-05-10 00:00+0000\n"
+"Last-Translator: Borges Bibliography Builder contributors\n"
 "Language: sv_SE\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Domain: borges-bibliography-builder\n"
 
 msgid "Imported metadata may be incomplete. Verify before publishing."
-msgstr "Importerad metadata kan vara ofullständig. Kontrollera innan publicering."
+msgstr "Importerade metadata kan vara ofullständiga. Kontrollera innan publicering."
 
 msgid "Add citations"
 msgstr "Lägg till källhänvisningar"
@@ -29,7 +29,7 @@ msgid "Add DOI(s), BibTeX entries, and citations in supported styles for books, 
 msgstr "Lägg till DOI:er, BibTeX-poster och källhänvisningar i stödda stilar för böcker, artiklar, kapitel och webbsidor. Separera flera formaterade hänvisningar med en tom rad."
 
 msgid "Resolving…"
-msgstr "Bearbetar…"
+msgstr "Hämtar…"
 
 msgid "Add"
 msgstr "Lägg till"
@@ -44,7 +44,7 @@ msgid "Title"
 msgstr "Titel"
 
 msgid "Container"
-msgstr "Behållare"
+msgstr "Överordnad publikation"
 
 msgid "Publisher"
 msgstr "Utgivare"
@@ -80,31 +80,31 @@ msgid "Citation Style"
 msgstr "Citeringsstil"
 
 msgid "Changing styles reformats auto-generated citations and keeps manual overrides intact."
-msgstr "Att byta stil omformaterar automatiskt genererade källhänvisningar och behåller manuella överskrivningar."
+msgstr "Ett stilbyte omformaterar automatiskt genererade källhänvisningar; manuella justeringar behålls."
 
 msgid "Visible Heading"
 msgstr "Synlig rubrik"
 
 msgid "Optional heading shown above the bibliography on the site front end when at least one citation exists."
-msgstr "Valfri rubrik som visas ovanför bibliografin på webbplatsens framsida när minst en källhänvisning finns."
+msgstr "Valfri rubrik som visas ovanför bibliografin på webbplatsen när minst en källhänvisning finns."
 
 msgid "Output JSON-LD"
-msgstr "Visa JSON-LD"
+msgstr "Generera JSON-LD"
 
 msgid "Helps search engines and other tools understand the bibliography."
 msgstr "Hjälper sökmotorer och andra verktyg att förstå bibliografin."
 
 msgid "Output COinS"
-msgstr "Visa COinS"
+msgstr "Generera COinS"
 
 msgid "Lets Zotero and similar tools detect citations on the page."
-msgstr "Låter Zotero och liknande verktyg upptäcka källhänvisningar på sidan."
+msgstr "Låter Zotero och liknande verktyg identifiera källhänvisningar på sidan."
 
 msgid "Output CSL-JSON"
-msgstr "Visa CSL-JSON"
+msgstr "Generera CSL-JSON"
 
 msgid "Makes citation data reusable by scholarly tools and services."
-msgstr "Gör citeringsdata återanvändbara för akademiska verktyg och tjänster."
+msgstr "Gör citeringsdata tillgängliga för återanvändning av akademiska verktyg och tjänster."
 
 msgid "Exports"
 msgstr "Exporter"
@@ -125,16 +125,16 @@ msgid "Download BibTeX"
 msgstr "Ladda ner BibTeX"
 
 msgid "Downloads the current bibliography as BibTeX for reference-manager and scholarly-writing workflows."
-msgstr "Laddar ner den aktuella bibliografin som BibTeX för referenshanterare och akademiska skrivflöden."
+msgstr "Laddar ner den aktuella bibliografin som BibTeX för referenshanterare och akademiska skrivprocesser."
 
 msgid "Download RIS"
 msgstr "Ladda ner RIS"
 
 msgid "Downloads the current bibliography as RIS for citation managers and import/export workflows."
-msgstr "Laddar ner den aktuella bibliografin som RIS för citeringshanterare och import-/exportflöden."
+msgstr "Laddar ner den aktuella bibliografin som RIS för referenshanterare och import-/exportprocesser."
 
 msgid "Notification"
-msgstr "Avisering"
+msgstr "Meddelande"
 
 msgid "Publication Type"
 msgstr "Publikationstyp"

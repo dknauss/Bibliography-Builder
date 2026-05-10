@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Bibliography 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/dknauss/borges-bibliography-builder/issues\n"
 "POT-Creation-Date: 2026-04-08 00:00+0000\n"
-"PO-Revision-Date: 2026-04-08 00:00+0000\n"
-"Last-Translator: Dan Knauss <dan@newlocalmedia.com>\n"
+"PO-Revision-Date: 2026-05-10 00:00+0000\n"
+"Last-Translator: Borges Bibliography Builder contributors\n"
 "Language: nl_NL\n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Domain: borges-bibliography-builder\n"
 
 msgid "Imported metadata may be incomplete. Verify before publishing."
-msgstr "Geïmporteerde metadata kunnen onvolledig zijn. Controleer ze vóór publicatie."
+msgstr "Geïmporteerde metadata kunnen onvolledig zijn. Controleer dit vóór publicatie."
 
 msgid "Add citations"
 msgstr "Citaten toevoegen"
@@ -23,13 +23,13 @@ msgid "Paste / Import"
 msgstr "Plakken / Importeren"
 
 msgid "Manual Entry"
-msgstr "Handmatig invoeren"
+msgstr "Handmatige invoer"
 
 msgid "Add DOI(s), BibTeX entries, and citations in supported styles for books, articles, chapters, and webpages. Separate multiple formatted citations with a blank line."
 msgstr "Voeg DOI's, BibTeX-vermeldingen en citaten toe in ondersteunde stijlen voor boeken, artikelen, hoofdstukken en webpagina's. Scheid meerdere opgemaakte citaten met een lege regel."
 
 msgid "Resolving…"
-msgstr "Bezig met verwerken…"
+msgstr "Ophalen…"
 
 msgid "Add"
 msgstr "Toevoegen"
@@ -44,7 +44,7 @@ msgid "Title"
 msgstr "Titel"
 
 msgid "Container"
-msgstr "Container"
+msgstr "Overkoepelende publicatie"
 
 msgid "Publisher"
 msgstr "Uitgever"
@@ -80,34 +80,34 @@ msgid "Citation Style"
 msgstr "Citatiestijl"
 
 msgid "Changing styles reformats auto-generated citations and keeps manual overrides intact."
-msgstr "Het wijzigen van stijlen formatteert automatisch gegenereerde citaten opnieuw en laat handmatige overschrijvingen intact."
+msgstr "Het wijzigen van de stijl formatteert automatisch gegenereerde citaten opnieuw; handmatige aanpassingen blijven behouden."
 
 msgid "Visible Heading"
 msgstr "Zichtbare kop"
 
 msgid "Optional heading shown above the bibliography on the site front end when at least one citation exists."
-msgstr "Optionele kop die boven de bibliografie op de voorkant van de site wordt getoond wanneer er ten minste één citaat is."
+msgstr "Optionele kop die boven de bibliografie op de website wordt getoond wanneer er ten minste één citaat aanwezig is."
 
 msgid "Output JSON-LD"
 msgstr "JSON-LD uitvoeren"
 
 msgid "Helps search engines and other tools understand the bibliography."
-msgstr "Helpt zoekmachines en andere hulpmiddelen de bibliografie te begrijpen."
+msgstr "Helpt zoekmachines en andere toepassingen de bibliografie te begrijpen."
 
 msgid "Output COinS"
 msgstr "COinS uitvoeren"
 
 msgid "Lets Zotero and similar tools detect citations on the page."
-msgstr "Laat Zotero en vergelijkbare hulpmiddelen citaten op de pagina detecteren."
+msgstr "Laat Zotero en vergelijkbare toepassingen citaten op de pagina detecteren."
 
 msgid "Output CSL-JSON"
 msgstr "CSL-JSON uitvoeren"
 
 msgid "Makes citation data reusable by scholarly tools and services."
-msgstr "Maakt citaatgegevens herbruikbaar voor wetenschappelijke hulpmiddelen en diensten."
+msgstr "Maakt citaatgegevens herbruikbaar voor wetenschappelijke toepassingen en diensten."
 
 msgid "Exports"
-msgstr "Exports"
+msgstr "Exporteren"
 
 msgid "Copy bibliography"
 msgstr "Bibliografie kopiëren"
@@ -125,13 +125,13 @@ msgid "Download BibTeX"
 msgstr "BibTeX downloaden"
 
 msgid "Downloads the current bibliography as BibTeX for reference-manager and scholarly-writing workflows."
-msgstr "Downloadt de huidige bibliografie als BibTeX voor referentiebeheerders en wetenschappelijke schrijfworkflows."
+msgstr "Downloadt de huidige bibliografie als BibTeX voor literatuurbeheerprogramma's en wetenschappelijke schrijfprocessen."
 
 msgid "Download RIS"
 msgstr "RIS downloaden"
 
 msgid "Downloads the current bibliography as RIS for citation managers and import/export workflows."
-msgstr "Downloadt de huidige bibliografie als RIS voor citatiebeheerders en import-/exportworkflows."
+msgstr "Downloadt de huidige bibliografie als RIS voor literatuurbeheerprogramma's en import-/exportprocessen."
 
 msgid "Notification"
 msgstr "Melding"
@@ -164,4 +164,4 @@ msgid "Zero-based bibliography block index within the post."
 msgstr "Op nul gebaseerde index van het bibliografieblok binnen het bericht."
 
 msgid "Response format: json, text, or csl-json."
-msgstr "Antwoordindeling: json, text of csl-json."
+msgstr "Antwoordformaat: json, text of csl-json."

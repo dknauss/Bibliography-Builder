@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Bibliography 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/dknauss/borges-bibliography-builder/issues\n"
 "POT-Creation-Date: 2026-04-08 00:00+0000\n"
-"PO-Revision-Date: 2026-04-08 00:00+0000\n"
-"Last-Translator: Dan Knauss <dan@newlocalmedia.com>\n"
+"PO-Revision-Date: 2026-05-10 00:00+0000\n"
+"Last-Translator: Borges Bibliography Builder contributors\n"
 "Language: de_DE\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Domain: borges-bibliography-builder\n"
 
 msgid "Imported metadata may be incomplete. Verify before publishing."
-msgstr "Importierte Metadaten können unvollständig sein. Vor der Veröffentlichung prüfen."
+msgstr "Importierte Metadaten können unvollständig sein. Vor der Veröffentlichung bitte prüfen."
 
 msgid "Add citations"
 msgstr "Zitate hinzufügen"
@@ -26,16 +26,16 @@ msgid "Manual Entry"
 msgstr "Manuelle Eingabe"
 
 msgid "Add DOI(s), BibTeX entries, and citations in supported styles for books, articles, chapters, and webpages. Separate multiple formatted citations with a blank line."
-msgstr "Füge DOIs, BibTeX-Einträge und Zitate in unterstützten Stilen für Bücher, Artikel, Kapitel und Webseiten hinzu. Trenne mehrere formatierte Zitate durch eine Leerzeile."
+msgstr "Füge DOIs, BibTeX-Einträge und Zitate in unterstützten Stilen für Bücher, Artikel, Kapitel und Webseiten hinzu. Mehrere formatierte Zitate durch eine Leerzeile trennen."
 
 msgid "Resolving…"
-msgstr "Wird aufgelöst…"
+msgstr "Wird abgerufen…"
 
 msgid "Add"
 msgstr "Hinzufügen"
 
 msgid "Clear"
-msgstr "Leeren"
+msgstr "Löschen"
 
 msgid "Author(s)"
 msgstr "Autor(en)"
@@ -44,7 +44,7 @@ msgid "Title"
 msgstr "Titel"
 
 msgid "Container"
-msgstr "Container"
+msgstr "Übergeordnete Publikation"
 
 msgid "Publisher"
 msgstr "Verlag"
@@ -62,10 +62,10 @@ msgid "URL"
 msgstr "URL"
 
 msgid "Hide citation form"
-msgstr "Zitationsformular ausblenden"
+msgstr "Zitierformular ausblenden"
 
 msgid "Show citation form"
-msgstr "Zitationsformular anzeigen"
+msgstr "Zitierformular einblenden"
 
 msgid "Settings"
 msgstr "Einstellungen"
@@ -80,25 +80,25 @@ msgid "Citation Style"
 msgstr "Zitierstil"
 
 msgid "Changing styles reformats auto-generated citations and keeps manual overrides intact."
-msgstr "Beim Ändern des Stils werden automatisch erzeugte Zitate neu formatiert, manuelle Überschreibungen bleiben erhalten."
+msgstr "Ein Stilwechsel formatiert automatisch erzeugte Zitate neu; manuelle Anpassungen bleiben erhalten."
 
 msgid "Visible Heading"
 msgstr "Sichtbare Überschrift"
 
 msgid "Optional heading shown above the bibliography on the site front end when at least one citation exists."
-msgstr "Optionale Überschrift, die im Frontend über der Bibliografie angezeigt wird, wenn mindestens ein Zitat vorhanden ist."
+msgstr "Optionale Überschrift, die im Frontend über der Bibliografie angezeigt wird, sobald mindestens ein Zitat vorhanden ist."
 
 msgid "Output JSON-LD"
 msgstr "JSON-LD ausgeben"
 
 msgid "Helps search engines and other tools understand the bibliography."
-msgstr "Hilft Suchmaschinen und anderen Werkzeugen, die Bibliografie zu verstehen."
+msgstr "Hilft Suchmaschinen und anderen Anwendungen, die Bibliografie zu verstehen."
 
 msgid "Output COinS"
 msgstr "COinS ausgeben"
 
 msgid "Lets Zotero and similar tools detect citations on the page."
-msgstr "Ermöglicht Zotero und ähnlichen Werkzeugen, Zitate auf der Seite zu erkennen."
+msgstr "Ermöglicht Zotero und ähnlichen Anwendungen, Zitate auf der Seite zu erkennen."
 
 msgid "Output CSL-JSON"
 msgstr "CSL-JSON ausgeben"
@@ -113,7 +113,7 @@ msgid "Copy bibliography"
 msgstr "Bibliografie kopieren"
 
 msgid "Copies the current bibliography as plain text in the current order and style."
-msgstr "Kopiert die aktuelle Bibliografie als Klartext in der aktuellen Reihenfolge und im aktuellen Stil."
+msgstr "Kopiert die aktuelle Bibliografie als unformatierten Text in der aktuellen Reihenfolge und im aktuellen Stil."
 
 msgid "Download CSL-JSON"
 msgstr "CSL-JSON herunterladen"
@@ -125,16 +125,16 @@ msgid "Download BibTeX"
 msgstr "BibTeX herunterladen"
 
 msgid "Downloads the current bibliography as BibTeX for reference-manager and scholarly-writing workflows."
-msgstr "Lädt die aktuelle Bibliografie als BibTeX für Literaturverwaltungen und wissenschaftliche Schreib-Workflows herunter."
+msgstr "Lädt die aktuelle Bibliografie als BibTeX für Literaturverwaltungsprogramme und wissenschaftliche Schreibprozesse herunter."
 
 msgid "Download RIS"
 msgstr "RIS herunterladen"
 
 msgid "Downloads the current bibliography as RIS for citation managers and import/export workflows."
-msgstr "Lädt die aktuelle Bibliografie als RIS für Zitationsmanager und Import-/Export-Workflows herunter."
+msgstr "Lädt die aktuelle Bibliografie als RIS für Literaturverwaltungsprogramme und Import-/Export-Prozesse herunter."
 
 msgid "Notification"
-msgstr "Benachrichtigung"
+msgstr "Hinweis"
 
 msgid "Publication Type"
 msgstr "Publikationstyp"
@@ -158,10 +158,10 @@ msgid "Bibliography block not found for the requested index."
 msgstr "Bibliografie-Block für den angeforderten Index nicht gefunden."
 
 msgid "Post ID to inspect for bibliography blocks."
-msgstr "Beitrags-ID zur Prüfung auf Bibliografie-Blöcke."
+msgstr "Beitrags-ID zur Suche nach Bibliografie-Blöcken."
 
 msgid "Zero-based bibliography block index within the post."
-msgstr "Nullbasierter Bibliografie-Blockindex innerhalb des Beitrags."
+msgstr "Nullbasierter Index des Bibliografie-Blocks innerhalb des Beitrags."
 
 msgid "Response format: json, text, or csl-json."
 msgstr "Antwortformat: json, text oder csl-json."

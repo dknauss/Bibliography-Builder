@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Bibliography 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/dknauss/borges-bibliography-builder/issues\n"
 "POT-Creation-Date: 2026-04-08 00:00+0000\n"
-"PO-Revision-Date: 2026-04-08 00:00+0000\n"
-"Last-Translator: Dan Knauss <dan@newlocalmedia.com>\n"
+"PO-Revision-Date: 2026-05-10 00:00+0000\n"
+"Last-Translator: Borges Bibliography Builder contributors\n"
 "Language: it_IT\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -44,7 +44,7 @@ msgid "Title"
 msgstr "Titolo"
 
 msgid "Container"
-msgstr "Contenitore"
+msgstr "Opera contenitrice"
 
 msgid "Publisher"
 msgstr "Editore"
@@ -80,28 +80,28 @@ msgid "Citation Style"
 msgstr "Stile della citazione"
 
 msgid "Changing styles reformats auto-generated citations and keeps manual overrides intact."
-msgstr "La modifica dello stile riformatta le citazioni generate automaticamente e mantiene intatte le sovrascritture manuali."
+msgstr "La modifica dello stile riformatta le citazioni generate automaticamente e mantiene intatte le personalizzazioni manuali."
 
 msgid "Visible Heading"
 msgstr "Intestazione visibile"
 
 msgid "Optional heading shown above the bibliography on the site front end when at least one citation exists."
-msgstr "Intestazione facoltativa mostrata sopra la bibliografia sul front-end del sito quando esiste almeno una citazione."
+msgstr "Intestazione facoltativa mostrata sopra la bibliografia sul sito pubblico quando esiste almeno una citazione."
 
 msgid "Output JSON-LD"
-msgstr "Mostra JSON-LD"
+msgstr "Genera JSON-LD"
 
 msgid "Helps search engines and other tools understand the bibliography."
 msgstr "Aiuta i motori di ricerca e altri strumenti a comprendere la bibliografia."
 
 msgid "Output COinS"
-msgstr "Mostra COinS"
+msgstr "Genera COinS"
 
 msgid "Lets Zotero and similar tools detect citations on the page."
 msgstr "Consente a Zotero e strumenti simili di rilevare le citazioni nella pagina."
 
 msgid "Output CSL-JSON"
-msgstr "Mostra CSL-JSON"
+msgstr "Genera CSL-JSON"
 
 msgid "Makes citation data reusable by scholarly tools and services."
 msgstr "Rende i dati delle citazioni riutilizzabili da strumenti e servizi accademici."
@@ -113,25 +113,25 @@ msgid "Copy bibliography"
 msgstr "Copia bibliografia"
 
 msgid "Copies the current bibliography as plain text in the current order and style."
-msgstr "Copia la bibliografia corrente come testo semplice nell'ordine e nello stile correnti."
+msgstr "Copia la bibliografia corrente come testo semplice, nell'ordine e nello stile correnti."
 
 msgid "Download CSL-JSON"
 msgstr "Scarica CSL-JSON"
 
 msgid "Downloads the current bibliography as structured citation data."
-msgstr "Scarica la bibliografia corrente come dati strutturati delle citazioni."
+msgstr "Scarica la bibliografia corrente come dati di citazione strutturati."
 
 msgid "Download BibTeX"
 msgstr "Scarica BibTeX"
 
 msgid "Downloads the current bibliography as BibTeX for reference-manager and scholarly-writing workflows."
-msgstr "Scarica la bibliografia corrente come BibTeX per gestori di riferimenti e flussi di scrittura accademica."
+msgstr "Scarica la bibliografia corrente in BibTeX per gestori di riferimenti bibliografici e flussi di scrittura accademica."
 
 msgid "Download RIS"
 msgstr "Scarica RIS"
 
 msgid "Downloads the current bibliography as RIS for citation managers and import/export workflows."
-msgstr "Scarica la bibliografia corrente come RIS per gestori di citazioni e flussi di importazione/esportazione."
+msgstr "Scarica la bibliografia corrente in RIS per gestori di citazioni e flussi di importazione/esportazione."
 
 msgid "Notification"
 msgstr "Notifica"
@@ -149,7 +149,7 @@ msgid "Cancel"
 msgstr "Annulla"
 
 msgid "Post not found."
-msgstr "Articolo non trovato."
+msgstr "Contenuto non trovato."
 
 msgid "Sorry, you are not allowed to read this bibliography."
 msgstr "Non sei autorizzato a leggere questa bibliografia."
@@ -161,7 +161,7 @@ msgid "Post ID to inspect for bibliography blocks."
 msgstr "ID del contenuto da ispezionare per i blocchi bibliografia."
 
 msgid "Zero-based bibliography block index within the post."
-msgstr "Indice del blocco bibliografia basato su zero all'interno del contenuto."
+msgstr "Indice del blocco bibliografia con base zero all'interno del contenuto."
 
 msgid "Response format: json, text, or csl-json."
 msgstr "Formato della risposta: json, text o csl-json."

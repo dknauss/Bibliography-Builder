@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Bibliography 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/dknauss/borges-bibliography-builder/issues\n"
 "POT-Creation-Date: 2026-04-08 00:00+0000\n"
-"PO-Revision-Date: 2026-04-08 00:00+0000\n"
-"Last-Translator: Dan Knauss <dan@newlocalmedia.com>\n"
+"PO-Revision-Date: 2026-05-10 00:00+0000\n"
+"Last-Translator: Borges Bibliography Builder contributors\n"
 "Language: sr_RS\n"
 "Language-Team: Serbian\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgid "Imported metadata may be incomplete. Verify before publishing."
 msgstr "Увезени метаподаци могу бити непотпуни. Проверите их пре објављивања."
 
 msgid "Add citations"
-msgstr "Додај цитате"
+msgstr "Додај изворе"
 
 msgid "Paste / Import"
 msgstr "Налепи / Увези"
@@ -26,10 +26,10 @@ msgid "Manual Entry"
 msgstr "Ручни унос"
 
 msgid "Add DOI(s), BibTeX entries, and citations in supported styles for books, articles, chapters, and webpages. Separate multiple formatted citations with a blank line."
-msgstr "Додајте DOI, BibTeX уносе и цитате у подржаним стиловима за књиге, чланке, поглавља и веб-странице. Одвојите више форматираних цитата празним редом."
+msgstr "Додајте DOI, BibTeX уносе и цитате у подржаним стиловима за књиге, чланке, поглавља и веб-странице. Вишеструке форматиране цитате одвојите празним редом."
 
 msgid "Resolving…"
-msgstr "Обрада…"
+msgstr "Преузимање…"
 
 msgid "Add"
 msgstr "Додај"
@@ -44,7 +44,7 @@ msgid "Title"
 msgstr "Наслов"
 
 msgid "Container"
-msgstr "Контејнер"
+msgstr "Надређена публикација"
 
 msgid "Publisher"
 msgstr "Издавач"
@@ -74,7 +74,7 @@ msgid "source"
 msgstr "извор"
 
 msgid "sources"
-msgstr "извори"
+msgstr "извора"
 
 msgid "Citation Style"
 msgstr "Стил цитирања"
@@ -86,28 +86,28 @@ msgid "Visible Heading"
 msgstr "Видљиви наслов"
 
 msgid "Optional heading shown above the bibliography on the site front end when at least one citation exists."
-msgstr "Опциони наслов приказан изнад библиографије на предњем делу сајта када постоји бар један цитат."
+msgstr "Опциони наслов приказан изнад библиографије на јавном делу сајта кад постоји бар један цитат."
 
 msgid "Output JSON-LD"
-msgstr "Прикажи JSON-LD"
+msgstr "Укључи JSON-LD"
 
 msgid "Helps search engines and other tools understand the bibliography."
-msgstr "Помаже претраживачима и другим алатима да разумеју библиографију."
+msgstr "Помаже претраживачима и другим алатима да препознају библиографију."
 
 msgid "Output COinS"
-msgstr "Прикажи COinS"
+msgstr "Укључи COinS"
 
 msgid "Lets Zotero and similar tools detect citations on the page."
-msgstr "Омогућава Zotero-у и сличним алатима да открију цитате на страници."
+msgstr "Омогућава Zotero и сличним алатима да откривају цитате на страници."
 
 msgid "Output CSL-JSON"
-msgstr "Прикажи CSL-JSON"
+msgstr "Укључи CSL-JSON"
 
 msgid "Makes citation data reusable by scholarly tools and services."
 msgstr "Омогућава поновну употребу података о цитирању у научним алатима и сервисима."
 
 msgid "Exports"
-msgstr "Извози"
+msgstr "Извоз"
 
 msgid "Copy bibliography"
 msgstr "Копирај библиографију"
@@ -125,7 +125,7 @@ msgid "Download BibTeX"
 msgstr "Преузми BibTeX"
 
 msgid "Downloads the current bibliography as BibTeX for reference-manager and scholarly-writing workflows."
-msgstr "Преузима тренутну библиографију као BibTeX за менаџере референци и научне токове писања."
+msgstr "Преузима тренутну библиографију као BibTeX за менаџере референци и научне токове рада."
 
 msgid "Download RIS"
 msgstr "Преузми RIS"
@@ -137,10 +137,10 @@ msgid "Notification"
 msgstr "Обавештење"
 
 msgid "Publication Type"
-msgstr "Тип публикације"
+msgstr "Врста публикације"
 
 msgid "Select a publication type"
-msgstr "Изаберите тип публикације"
+msgstr "Изаберите врсту публикације"
 
 msgid "Save"
 msgstr "Сачувај"
@@ -155,13 +155,13 @@ msgid "Sorry, you are not allowed to read this bibliography."
 msgstr "Немате дозволу да читате ову библиографију."
 
 msgid "Bibliography block not found for the requested index."
-msgstr "Библиографски блок није пронађен за тражени индекс."
+msgstr "Библиографски блок за тражени индекс није пронађен."
 
 msgid "Post ID to inspect for bibliography blocks."
 msgstr "ID чланка за проверу библиографских блокова."
 
 msgid "Zero-based bibliography block index within the post."
-msgstr "Индекс библиографског блока у чланку који почиње од нуле."
+msgstr "Индекс библиографског блока унутар чланка (нумерација почиње од нуле)."
 
 msgid "Response format: json, text, or csl-json."
 msgstr "Формат одговора: json, text или csl-json."
