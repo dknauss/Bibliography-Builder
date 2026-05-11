@@ -29,16 +29,6 @@ The **Borges Bibliography Builder** transforms pasted DOI(s), PubMed/PMID record
 
 **Translation-ready.** Plugin interface strings use the `borges-bibliography-builder` text domain, and official WordPress.org language packs are generated as community translations are approved on translate.wordpress.org.
 
-= What's new in 1.3.1 =
-
-* **Bibliography cap raised to 200** — the per-bibliography limit grows from 50 to 200 citations. A dismissible editor notice appears when a bibliography has between 100 and 199 entries to flag potential slowness on shared hosting. The 50-entry per-paste limit is unchanged.
-
-= Earlier release highlights =
-
-* **1.3.0** — Explicit 50-citation cap with editor warnings, async stale-result protection across all editor flows, smaller release package, and PMID/DOI network efficiency improvements.
-* **1.2.0** — PubMed/PMID import through an authenticated REST proxy, BibLaTeX export, manual reordering for IEEE and Vancouver styles, and full-bibliography reformat parity across all nine styles.
-* **1.1.x** — Optional Block Accessibility Checks integration and restored visible keyboard focus on editor row actions.
-
 == Installation ==
 
 1. Upload the plugin files to `/wp-content/plugins/borges-bibliography-builder/`, or install directly through the WordPress plugin screen.
