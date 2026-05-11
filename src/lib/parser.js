@@ -30,6 +30,7 @@ const LATEX_DOCUMENT_PATTERN =
 	/\\documentclass\b|\\begin\{document\}|\\printbibliography\b|\\addbibresource\b|\\(?:auto|foot|paren|text)?cite\w*\{/u;
 const DOI_METADATA_CACHE = new Map();
 const PENDING_DOI_RESOLUTIONS = new Map();
+let DOI_RESOLUTION_QUEUE = Promise.resolve();
 export { validateAndSanitizeCsl };
 
 function normalizePmidInput(value) {
@@ -130,6 +131,14 @@ function setCachedDoiMetadata(cacheKey, cslItems) {
 export function clearDoiMetadataCache() {
 	DOI_METADATA_CACHE.clear();
 	PENDING_DOI_RESOLUTIONS.clear();
+	DOI_RESOLUTION_QUEUE = Promise.resolve();
+}
+
+function enqueueDoiResolution(resolve) {
+	const queuedResolution = DOI_RESOLUTION_QUEUE.catch(() => {}).then(resolve);
+	DOI_RESOLUTION_QUEUE = queuedResolution.catch(() => {});
+
+	return queuedResolution;
 }
 
 async function resolveDoiCslItems(value) {
@@ -145,15 +154,15 @@ async function resolveDoiCslItems(value) {
 
 		PENDING_DOI_RESOLUTIONS.set(
 			cacheKey,
-			Cite.async(normalizedDoi)
-				.then((cite) => {
+			enqueueDoiResolution(() =>
+				Cite.async(normalizedDoi).then((cite) => {
 					const cslItems = cite.get({ type: 'json' });
 					setCachedDoiMetadata(cacheKey, cslItems);
 					return cslItems;
 				})
-				.finally(() => {
-					PENDING_DOI_RESOLUTIONS.delete(cacheKey);
-				})
+			).finally(() => {
+				PENDING_DOI_RESOLUTIONS.delete(cacheKey);
+			})
 		);
 	}
 

@@ -461,7 +461,7 @@ describe('parsePastedInput', () => {
 		]);
 	});
 
-	it('processes DOI batches with bounded concurrency while preserving order', async () => {
+	it('serializes DOI batches while preserving order', async () => {
 		let activeCount = 0;
 		let maxActiveCount = 0;
 
@@ -487,7 +487,7 @@ describe('parsePastedInput', () => {
 
 		expect(result.errors).toEqual([]);
 		expect(result.entries).toHaveLength(5);
-		expect(maxActiveCount).toBeLessThanOrEqual(4);
+		expect(maxActiveCount).toBe(1);
 		expect(result.entries.map((entry) => entry.csl.title)).toEqual([
 			'Resolved 10.1000/a',
 			'Resolved 10.1000/b',
