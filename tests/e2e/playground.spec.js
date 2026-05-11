@@ -1,7 +1,21 @@
 /* eslint-disable jest/no-done-callback */
 const { test, expect } = require('@playwright/test');
 
-const DOI_SAMPLE = '10.1038/s41586-020-2649-2';
+const DOI_SAMPLES = ['10.1145/3368089.3409742', '10.1038/s41586-020-2649-2'];
+const DEMO_IMPORT_INPUT = `${DOI_SAMPLES.join('\n\n')}
+
+PMID:26673779
+
+@article{knuth1984literate,
+  author = {Knuth, Donald E.},
+  title = {Literate Programming},
+  journal = {The Computer Journal},
+  year = {1984},
+  volume = {27},
+  number = {2},
+  pages = {97--111},
+  doi = {10.1093/comjnl/27.2.97}
+}`;
 
 function getPluginRow(page) {
 	return page.locator(
@@ -143,6 +157,45 @@ async function insertBibliographyBlock(page) {
 	return editorFrame;
 }
 
+async function createPostWithBibliographyBlock(page) {
+	await ensurePluginActivated(page);
+	await page.goto('/wp-admin/post-new.php');
+	await page.waitForLoadState('domcontentloaded');
+	await dismissEditorOverlay(page);
+
+	return insertBibliographyBlock(page);
+}
+
+async function importCitations(editorFrame, inputValue, expectedCount) {
+	const textarea = editorFrame
+		.locator('#bibliography-builder-paste-input')
+		.first();
+	await expect(textarea).toBeVisible({ timeout: 20_000 });
+	await textarea.fill(inputValue);
+
+	await editorFrame.getByRole('button', { name: /^Add$/i }).click();
+
+	const entries = editorFrame.locator('.bibliography-builder-entry-text');
+	await expect(entries.first()).toBeVisible({ timeout: 45_000 });
+	await expect(entries).toHaveCount(expectedCount, { timeout: 45_000 });
+
+	const notice = editorFrame
+		.locator(
+			'.bibliography-builder-inline-snackbar, .bibliography-builder-inline-notice'
+		)
+		.first();
+	await expect(notice).toBeVisible({ timeout: 20_000 });
+	await expect(notice).toContainText(
+		`Added ${expectedCount} ${
+			expectedCount === 1 ? 'citation' : 'citations'
+		}.`
+	);
+	await expect(notice).not.toContainText("Couldn't parse");
+	await expect(notice).not.toContainText('Unparsed items remain');
+
+	return entries;
+}
+
 test('bibliography block is discoverable in the editor inserter', async ({
 	page,
 }) => {
@@ -166,27 +219,32 @@ test('bibliography block imports a DOI in the Playground editor', async ({
 }) => {
 	test.setTimeout(90_000);
 
-	await ensurePluginActivated(page);
-	await page.goto('/wp-admin/post-new.php');
-	await page.waitForLoadState('domcontentloaded');
-	await dismissEditorOverlay(page);
+	const editorFrame = await createPostWithBibliographyBlock(page);
+	const entries = await importCitations(editorFrame, DOI_SAMPLES[1], 1);
 
-	const editorFrame = await insertBibliographyBlock(page);
-	const textarea = editorFrame
-		.locator('#bibliography-builder-paste-input')
-		.first();
-	await expect(textarea).toBeVisible({ timeout: 20_000 });
-	await textarea.fill(DOI_SAMPLE);
-
-	await editorFrame.getByRole('button', { name: /^Add$/i }).click();
-
-	const entryText = editorFrame
-		.locator('.bibliography-builder-entry-text')
-		.first();
-	await expect(entryText).toBeVisible({ timeout: 45_000 });
 	await expect
-		.poll(async () => (await entryText.textContent())?.trim() || '', {
+		.poll(async () => (await entries.first().textContent())?.trim() || '', {
 			timeout: 45_000,
 		})
 		.not.toBe('');
+});
+
+test('bibliography block imports two pasted DOIs together', async ({
+	page,
+}) => {
+	test.setTimeout(120_000);
+
+	const editorFrame = await createPostWithBibliographyBlock(page);
+
+	await importCitations(editorFrame, DOI_SAMPLES.join('\n\n'), 2);
+});
+
+test('bibliography block imports the demo DOI, PMID, and BibTeX content', async ({
+	page,
+}) => {
+	test.setTimeout(150_000);
+
+	const editorFrame = await createPostWithBibliographyBlock(page);
+
+	await importCitations(editorFrame, DEMO_IMPORT_INPUT, 4);
 });
