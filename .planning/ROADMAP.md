@@ -154,9 +154,6 @@ Planned:
    variants only where they do not undermine plugin-deactivation resilience.
 6. **BibLaTeX import** — `@citation-js/plugin-bibtex` already parses BibLaTeX;
    wire into the parser/paste flow for completeness.
-7. **PMID input/resolution** — prioritize before native NBIB; biomedical users
-   usually need PubMed lookup first, and PMID can resolve into the existing CSL
-   source-of-truth model.
 
 Deferred / demand-gated:
 
@@ -240,16 +237,16 @@ Investigation outcome on 2026-04-05:
     `parsePastedInput()` as the default behavior
 -   deeper formatter architecture changes are not justified yet
 
-### Performance/stability remediation update — 2026-05-10
+### Performance/stability remediation update — 2026-05-11
 
 Current planning is grounded in
-`/Users/danknauss/Developer/GitHub/wp-bibliography-block/docs/planning/performance-stability-remediation-plan.md`
+`docs/planning/performance-stability-remediation-plan.md`
 and executed through
-`/Users/danknauss/Developer/GitHub/wp-bibliography-block/.planning/phases/02-performance-stability-remediation/02-PLAN.md`.
+`.planning/phases/02-performance-stability-remediation/02-PLAN.md`.
 
 Implementation status: committed (`3d5d3de` "stabilize bibliography formatter
-workflows", `539b6b3` "address stabilization review notes"). HEAD is 8 commits
-ahead of `v1.2.0`.
+workflows", `539b6b3` "address stabilization review notes") and shipped in the
+1.3.x release line. `v1.3.3` is the current public release baseline.
 
 Completed Phase 2 outcomes:
 
@@ -272,13 +269,12 @@ Completed Phase 2 outcomes:
 
 Current fix priority:
 
-1. Cut a fresh release (recommended `1.3.0`) so the explicit 50-citation
-   policy, async stale guards, smaller release zip, and PMID/DOI hardening
-   reach WordPress.org users.
+1. Keep release, WordPress.org SVN, and Playground demo behavior aligned after
+   any DOI/PMID/BibTeX import change.
 2. Keep optional deeper splits as follow-up only if review finds a concrete
    blocker.
-3. Resume new development after the release tag: frontend Cite/Export
-   controls, writable REST/Abilities design, and language-pack expansion.
+3. Resume new development: frontend Cite/Export controls,
+   writable REST/Abilities design, and language-pack expansion.
 
 ## WordPress.org asset follow-up
 
@@ -308,8 +304,6 @@ Completed:
 
 -   expanded the GitHub Actions runtime matrix across additional
     Apache/Nginx/PHP/WordPress combinations
--   added a SQLite single-site runtime smoke lane with the same artifact capture
-    used for MySQL lanes
 -   added an Apache/PHP 8.3/latest-WordPress Multisite runtime smoke lane with
     network activation and artifact capture
 
@@ -317,6 +311,7 @@ Planned next:
 
 -   keep runtime lanes stable and add new coverage only when compatibility risk
     justifies it
+-   consider a SQLite lane if a concrete compatibility risk appears
 
 ## WordPress.org launch status
 
@@ -343,20 +338,18 @@ Current operational note (2026-05-04):
 -   Post-launch cleanup should keep GitHub README, WordPress.org `readme.txt`,
     SPEC, release assets, and SVN output aligned.
 
-## Immediate next-task priorities (2026-05-10)
+## Immediate next-task priorities (2026-05-11)
 
-1. **Cut release `1.3.0`** — bump `package.json`, `bibliography-builder.php`
-    plugin header, `readme.txt` Stable tag, and add a `1.3.0` changelog entry
-    covering the explicit 50-citation policy, async stale guards, manual-entry
-    single-format path, smaller release zip, and PMID/DOI hardening. Tag
-    `v1.3.0` to trigger the WordPress.org SVN deploy.
-2. **Keep CI/runtime compatibility hygiene green**
+1. **Keep CI/runtime compatibility hygiene green**
     - monitor release-package output, WordPress.org artifact alignment, PHP
       deprecations in citeproc-php, and runtime smoke lanes
-3. **Resume interoperability enhancements after `1.3.0` ships**
+2. **Keep Playground import coverage representative**
+    - maintain DOI, DOI batch, PubMed/PMID, and mixed DOI + PMID + BibTeX
+      coverage when demo starter content changes
+3. **Resume interoperability enhancements**
     - frontend Cite/Export affordances are the next feature track
     - writable REST/Abilities needs a design memo before implementation
-4. **Defer low-priority expansion work until hardening release is live**
+4. **Defer low-priority expansion work until the next focused pass**
     - language-pack expansion, optional accessibility tooling integration, and
       localized banner variants remain backlog items
 
@@ -656,22 +649,22 @@ Plans:
 -   [x] 02-PLAN.md — performance and stability remediation (committed in
     `3d5d3de`, `539b6b3`)
 
-### Phase 3: 1.3.0 release prep
+### Phase 3: 1.3.x release prep
 
--   **Goal:** Ship the Phase 2 stabilization work as a versioned release so
-    WordPress.org users receive the explicit 50-citation total cap, async
-    stale-result guards, manual-entry single-format path, smaller release zip,
-    and PMID/DOI network hardening.
--   **Requirements:** bump version to `1.3.0` in `package.json`,
-    `bibliography-builder.php` plugin header, and `readme.txt` Stable tag;
-    write `1.3.0` changelog entry; commit planning-doc updates; tag `v1.3.0`
-    to trigger the `wp-deploy.yml` WordPress.org SVN deploy.
+-   **Goal:** Ship the Phase 2 stabilization work and follow-up DOI Playground
+    fixes as versioned releases so WordPress.org users receive the explicit
+    50-citation total cap, async stale-result guards, manual-entry
+    single-format path, smaller release zip, PMID/DOI network hardening, and
+    reliable DOI imports in browser-based WordPress Playground.
+-   **Requirements:** maintain package/header/readme version alignment, write
+    changelog entries for each 1.3.x release, package the release ZIP, publish
+    the GitHub Release, and deploy the WordPress.org SVN release.
 -   **Depends on:** Phase 2 committed to `main`.
 -   **Plans:** 1 plan.
 
 Plans:
 
--   [ ] 03-01-PLAN.md — bump version to 1.3.0, write changelog, commit planning docs, tag v1.3.0
+-   [x] 03-01-PLAN.md — 1.3.x release prep; current public baseline is `v1.3.3`
 
 ### Phase 4: Frontend Cite/Export affordances
 

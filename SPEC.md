@@ -2,7 +2,7 @@
 
 ## Overview
 
-A standalone WordPress block plugin that transforms pasted scholarly citations (DOIs, BibTeX entries) into a semantically rich, auto-sorted bibliography list. No shortcodes. Static HTML output that survives plugin deactivation.
+A standalone WordPress block plugin that transforms pasted scholarly citations (DOIs, PubMed/PMID records, BibTeX entries, and supported formatted citations) into a semantically rich, auto-sorted bibliography list. No shortcodes. Static HTML output that survives plugin deactivation.
 
 **Plugin slug:** `borges-bibliography-builder`
 **Block namespace:** `bibliography-builder/bibliography`
@@ -40,8 +40,8 @@ A standalone WordPress block plugin that transforms pasted scholarly citations (
 
 | Dependency          | Role                                                                     | Cost / API Key                                                                                                  |
 | ------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| `citation-js` (npm) | DOI resolution (via CrossRef) and BibTeX parsing | Free, no API key. CrossRef requests benefit from a polite-pool contact email in headers for better rate limits. |
-| CrossRef API        | Upstream DOI metadata provider (used transparently by `citation-js`)     | Free, public, no key required                                                                                   |
+| `citation-js` (npm) | BibTeX parsing and fallback DOI support | Free, no API key. Pinned package versions keep parser behavior stable. |
+| CrossRef API        | Primary DOI metadata provider through the CORS-friendly CSL transform endpoint; `citation-js` remains available as a fallback where direct browser fetch is unavailable | Free, public, no key required |
 | `citeproc-php` (Composer) | Local CSL-JSON → plain-text bibliography formatting using plugin-owned GPL-compatible styles/locales | Runs locally in WordPress; no external service |
 | AnyStyle (Ruby gem) | ML-based free-text citation parsing                                      | Free to self-host; no public API. **Not needed for MVP.**                                                       |
 
@@ -49,11 +49,11 @@ A standalone WordPress block plugin that transforms pasted scholarly citations (
 
 ## Scope (1.0)
 
-**"Paste a DOI, BibTeX entry, or supported formatted citation and render it as a semantically rich bibliography in any of nine academic citation styles."**
+**"Paste a DOI, PubMed/PMID record, BibTeX entry, or supported formatted citation and render it as a semantically rich bibliography in any of nine academic citation styles."**
 
 ### Supported Input Formats
 
-1. **DOI** — one or more per paste, one per line. Detected by `10.\d{4,}/` pattern. Resolved to CSL-JSON via `citation-js` (CrossRef lookup, client-side, no API key).
+1. **DOI** — one or more per paste, one per line. Detected by `10.\d{4,}/` pattern. Resolved to CSL-JSON through CrossRef's CORS-friendly CSL transform endpoint, with sequential browser fetches and a `citation-js` fallback when direct fetch is unavailable.
 2. **PubMed/PMID** — one or more `PMID:<number>` entries per paste. Resolved through the authenticated WordPress REST proxy to a fixed NCBI/PMC CSL endpoint; PMID input is validated as numeric before any outbound request.
 3. **BibTeX** — one or more entries per paste. Detected by `@type{` boundaries. Parsed to CSL-JSON via `citation-js` (client-side).
 4. **Mixed** — a paste containing DOIs, PubMed/PMID entries, and BibTeX entries, separated by blank lines.
@@ -120,7 +120,7 @@ Each item in the `citations` array:
 {
 	"id": "uuid-v4",
 	"csl": {
-		// Full CSL-JSON object as returned by citation-js
+		// Full CSL-JSON object as returned by DOI, PubMed/PMID, BibTeX, free-text, or manual-entry resolvers
 		// See https://citeproc-js.readthedocs.io/en/latest/csl-json/markup.html
 	},
 	"displayOverride": null,
@@ -136,7 +136,7 @@ Each item in the `citations` array:
 | `csl`             | object           | Canonical CSL-JSON data. Source of truth for all metadata output.                                                                                                                                                                                                        |
 | `displayOverride` | string or null   | If the user has manually edited the formatted display text, the edited version is stored here. When non-null, this text is rendered instead of the auto-formatted output. The `csl` object remains unchanged and continues to power JSON-LD, COinS, and CSL-JSON output. |
 | `formattedText`   | string           | Persisted cache of the current auto-formatted bibliography text for the selected style. Derived from CSL data and safe to recompute.                                                                                                                                     |
-| `inputFormat`     | enum             | `"doi"`, `"bibtex"`, or `"freetext"`                                                                                                                                                                                                                                     |
+| `inputFormat`     | enum             | `"doi"`, `"pmid"`, `"bibtex"`, `"freetext"`, or `"manual"`                                                                                                                                                                                                                |
 | `parseWarnings`   | array            | Warning codes attached to imported records that need extra user review.                                                                                                                                                                                                  |
 
 ---
@@ -149,7 +149,7 @@ Modeled on the core **Quote** and **List** blocks.
 
 When the block is first inserted, the add-citation form is open by default and the textarea uses the placeholder text:
 
-> Add DOI(s), BibTeX entries, and citations in supported styles for books, articles, chapters, and webpages.
+> Add DOI(s), PubMed/PMID records, BibTeX entries, and citations in supported styles for books, articles, chapters, and webpages. Separate multiple formatted citations with a blank line.
 
 ### Paste & Parse Flow
 
@@ -157,9 +157,10 @@ When the block is first inserted, the add-citation form is open by default and t
 2. `parser.js` detects format(s) per entry:
     - Split on blank lines
     - Identify DOIs by regex: `/(?:https?:\/\/(?:dx\.)?doi\.org\/)?10\.\d{4,}\/[^\s]+/g`
+    - Identify PubMed/PMID records by `PMID:<number>` / `pmid:<number>`
     - Identify BibTeX by `@` + type prefix: `/@\w+\{/`
     - Each detected entry is parsed independently
-3. `citation-js` resolves DOIs (async, CrossRef fetch) and parses BibTeX (sync).
+3. CrossRef resolves DOIs through the direct CSL transform endpoint; the authenticated WordPress REST proxy resolves PubMed/PMID records through the fixed NCBI/PMC CSL endpoint; `citation-js` parses BibTeX and remains a DOI fallback when direct browser fetch is unavailable.
 4. Parsed CSL-JSON objects are assigned UUIDs, wrapped in citation objects, and appended to the `citations` array.
 5. The array is re-sorted per the selected style family rules (see Sorting).
 6. Validation feedback appears inside the block, attached to the add form, using Gutenberg notice primitives managed through the `core/notices` store:
@@ -465,16 +466,16 @@ composer analyze:php         # Psalm static analysis
 ```json
 {
 	"dependencies": {
-		"@citation-js/core": "^0.7",
-		"@citation-js/plugin-doi": "^0.7",
-		"@citation-js/plugin-bibtex": "^0.7"
+		"@citation-js/core": "0.7.18",
+		"@citation-js/plugin-doi": "0.7.18",
+		"@citation-js/plugin-bibtex": "0.7.18"
 	}
 }
 ```
 
 These handle:
 
--   `plugin-doi`: DOI string → CSL-JSON (via CrossRef API fetch)
+-   `plugin-doi`: DOI string → CSL-JSON fallback support when direct CrossRef fetch is unavailable
 -   `plugin-bibtex`: BibTeX string → CSL-JSON
 
 Formatted bibliography strings are generated locally through `citeproc-php` using plugin-owned GPL-compatible CSL style and locale fixtures. Do not bundle the official CSL style or locale repositories in the WordPress.org release package.
@@ -643,7 +644,7 @@ The bibliography's hanging indent and typography must remain readable in Windows
 #### Paste Zone
 
 -   The paste zone is a standard `<textarea>` with an associated label (screen-reader-only is acceptable as long as it remains present).
--   Placeholder text ("Add DOI(s), BibTeX entries, and citations in supported styles for books, articles, chapters, and webpages.") must be supplemented by a label — placeholder text alone is not accessible, as it disappears on focus and is not announced by all screen readers.
+-   Placeholder text ("Add DOI(s), PubMed/PMID records, BibTeX entries, and citations in supported styles for books, articles, chapters, and webpages. Separate multiple formatted citations with a blank line.") must be supplemented by a label — placeholder text alone is not accessible, as it disappears on focus and is not announced by all screen readers.
 
 #### Async State Communication (DOI Resolution)
 
@@ -653,7 +654,7 @@ DOI resolution requires a network fetch to CrossRef, which may take several seco
 2. **Completion announcement.** Use an `aria-live="polite"` region to announce the result when parsing completes. Current notice wording is short and action-oriented, for example:
     - `Added 3 citations.`
     - `No new citations added. Skipped 1 duplicate.`
-    - `This looks like LaTeX, not a bibliography entry. Paste a DOI, BibTeX entry, or supported citation instead.`
+    - `This looks like LaTeX, not a bibliography entry. Paste a DOI, PMID, BibTeX entry, or supported citation instead.`
 3. **Dismiss/clear behavior.** Inline notices need an explicit dismiss button, pure-success snackbars should auto-dismiss, and typing or mode-switching in the add UI should clear the current notice.
 4. **Notice locality.** The implementation intentionally keeps feedback block-local instead of sending all messages through the global editor snackbar region. Pure success states may use a local Gutenberg snackbar, while richer parse/import validation stays inline next to the add form. This preserves nearby context for mixed-result feedback and still aligns success handling more closely with Gutenberg norms.
 
@@ -969,13 +970,12 @@ None of these are blocking for 1.0. The frontend is zero-JS and the editor bundl
 
 ### Runtime Testing Coverage
 
-Multisite and SQLite coverage are no longer future gaps. CI includes runtime smoke coverage for:
+Multisite coverage is no longer a future gap. CI includes runtime smoke coverage for:
 
 -   representative Apache and Nginx environments across supported PHP and WordPress versions
--   a SQLite single-site runtime lane
 -   an Apache/PHP/latest-WordPress Multisite lane with network activation
 
-Future runtime work should focus on keeping these lanes stable and adding new cases only when a compatibility risk justifies them.
+SQLite is not currently part of the GitHub runtime matrix. Future runtime work should focus on keeping existing lanes stable and adding SQLite or other cases only when a compatibility risk justifies them.
 
 ---
 
@@ -983,7 +983,7 @@ Future runtime work should focus on keeping these lanes stable and adding new ca
 
 ### Why `citation-js` plus `citeproc-php` over bundled citeproc-js?
 
-`citation-js` remains the best fit for DOI resolution and BibTeX parsing in the editor. Formatting is handled by `citeproc-php` on a local WordPress REST endpoint so the editor bundle does not include citeproc-js and the WordPress.org package can avoid non-GPL-compatible CSL/citeproc-js licensing concerns. The block still saves static plain-text output in post content; PHP formatting is an editor-time service, not a frontend render callback.
+`citation-js` remains the best fit for BibTeX parsing and fallback DOI support in the editor. Primary browser DOI resolution uses CrossRef's CSL transform endpoint directly because that path works in WordPress Playground without `doi.org` content-negotiation redirects. Formatting is handled by `citeproc-php` on a local WordPress REST endpoint so the editor bundle does not include citeproc-js and the WordPress.org package can avoid non-GPL-compatible CSL/citeproc-js licensing concerns. The block still saves static plain-text output in post content; PHP formatting is an editor-time service, not a frontend render callback.
 
 Because formatter requests depend on `citeproc-php`, any WordPress Playground demo that exercises editor formatting must load PHP `intl`. Keep both `playground/blueprint.json` and `.wordpress-org/blueprints/blueprint.json` configured with both `phpExtensionBundles: ["kitchen-sink"]` and `features: { "networking": true, "intl": true }`. The bundle form matches WordPress.org Preview guidance, while the explicit `features.intl` flag is required by the live browser Playground runtime to avoid `bibliography_builder_formatter_extension_missing` fallback notices.
 
@@ -1019,19 +1019,9 @@ If a future dependency upgrade makes direct `@wordpress/icons` imports reliable 
 
 Google Scholar inclusion requires the **site** to primarily host scholarly content, with each article on a separate URL and a visible abstract. Highwire tags describe the page itself as a scholarly work — they don't describe works cited on the page. A blog post with a bibliography block is not a journal article. Injecting Highwire tags on arbitrary posts would be semantically incorrect and would not achieve Google Scholar inclusion. This concern belongs in a separate companion plugin that establishes the right post type and site structure. See Roadmap Phase 6.
 
-### CrossRef Polite Pool
+### CrossRef Request Policy
 
-CrossRef's public API is free and keyless. However, they offer a "polite pool" with better rate limits for clients that include a contact email in the `User-Agent` or `Mailto` header. The plugin should set this header via `citation-js` configuration:
-
-```javascript
-Cite.plugins.config.get('@doi').setApiUrl('https://api.crossref.org/works/', {
-	headers: {
-		'User-Agent': 'BibliographyBuilder/1.0 (mailto:contact@example.com)',
-	},
-});
-```
-
-The email could be configurable via a plugin setting, or use a sensible default.
+CrossRef's public API is free and keyless. Browser-based DOI resolution uses CrossRef's CSL transform endpoint directly because it works in WordPress Playground without `doi.org` content-negotiation redirects. Browser fetches cannot set a custom `User-Agent`, and the plugin does not currently collect a contact email for a `mailto` parameter, so request policy focuses on fixed-host lookup, input validation, sequential DOI resolution, and deduplication. If a future server-side DOI proxy or settings page is added, revisit polite-pool contact configuration there.
 
 ---
 

@@ -7,8 +7,8 @@ It is structured as a sequence of self-contained requirements grouped into four 
 ## Status
 
 - **Drafted:** 2026-05-08
-- **Updated:** 2026-05-09
-- **State:** Phase 1 partially implemented; JS lint, CSS lint, Jest, and production build verified locally on 2026-05-09 via a bootstrapped npm. PHP/Composer verification remains pending because the current desktop shell lacks PHP and Composer.
+- **Updated:** 2026-05-11
+- **State:** Implemented through the 1.3.x release line. Keep this document as the historical remediation plan and revisit budgets before new performance work.
 - **Owner:** TBD
 - **Stakeholders:** Plugin maintainers, performance reviewer, release engineering
 - **Canonical path:** `docs/planning/performance-stability-remediation-plan.md`
@@ -64,8 +64,8 @@ Longer-term work should focus on reducing whole-list reformatting for add/edit/d
 
 ### Release-package observations
 
-- Current release zip: ~588 KB
-- Current unpacked release: ~1.9 MB
+- Current `v1.3.3` release zip: ~400 KB
+- Current unpacked release: ~1.5 MB
 - Obvious prune candidates include:
   - `composer.lock`
   - non-runtime vendor docs/images/examples

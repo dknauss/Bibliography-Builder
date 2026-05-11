@@ -20,7 +20,7 @@ Just write out your citations or paste DOIs, PubMed/PMID identifiers, and BibTeX
 
 ## Try it in WordPress Playground
 
-Install the public release from [WordPress.org](https://wordpress.org/plugins/borges-bibliography-builder/) or launch a disposable WordPress instance with the plugin preinstalled: [Try the Borges Bibliography Builder in WordPress Playground](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/dknauss/borges-bibliography-builder/main/playground/blueprint.json). The GitHub-hosted demo Blueprint installs the public plugin package from the WordPress.org plugin directory and explicitly requests PHP `intl` support because editor-time CSL formatting runs through the plugin's local PHP formatter.
+Install the public release from [WordPress.org](https://wordpress.org/plugins/borges-bibliography-builder/) or launch a disposable WordPress instance with the plugin preinstalled: [Try the Borges Bibliography Builder in WordPress Playground](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/dknauss/borges-bibliography-builder/main/playground/blueprint.json). The GitHub-hosted demo Blueprint installs the latest GitHub Release ZIP through the WordPress Playground CORS proxy and explicitly requests PHP `intl` support because editor-time CSL formatting runs through the plugin's local PHP formatter. The WordPress.org Preview blueprint is separate; WordPress.org installs Borges automatically there, and the blueprint only seeds demo content and auxiliary plugin setup.
 
 ![](.wordpress-org/banner-1544x500.png)
 
@@ -215,7 +215,7 @@ composer analyze:php         # Psalm static analysis
 GitHub Actions currently runs:
 
 - Node quality/build checks
-- PHPUnit across PHP 7.4, 8.1, and 8.3
+- PHPUnit and PHPCS on PHP 8.3
 - Psalm static analysis
 - CodeQL for JavaScript and PHP
 - Codecov uploads from JS + PHP coverage
@@ -236,7 +236,7 @@ The GitHub Actions runtime matrix currently covers:
 
 Each runtime smoke job uploads artifacts, including Docker logs, service status, HTTP responses, and environment summaries under `output/runtime-matrix/<matrix-name>`.
 
-SQLite and Multisite runtime smoke coverage are included in CI; future runtime work should focus on keeping those lanes stable and adding cases only when a compatibility risk justifies them.
+Multisite runtime smoke coverage is included in CI. SQLite is not currently part of the GitHub runtime matrix; add it when a compatibility risk justifies the extra lane.
 
 ## Project Documentation and Operational Files
 
@@ -256,8 +256,8 @@ WordPress.org branding assets live in [.wordpress-org](./.wordpress-org/), edita
 
 The Playground demo and WordPress.org Preview both rely on the PHP formatter used by the editor REST endpoint. That formatter uses `citeproc-php`, which requires PHP `intl`. Keep both Blueprint files in sync:
 
-- `playground/blueprint.json` powers the GitHub README and WordPress.org readme demo link; it installs the plugin via the `wordpress.org/plugins` resource to avoid GitHub Release asset CORS failures in the browser runtime.
-- `.wordpress-org/blueprints/blueprint.json` deploys to WordPress.org SVN as `assets/blueprints/blueprint.json` for the plugin-directory Preview button.
+- `playground/blueprint.json` powers the GitHub README and WordPress.org readme demo link; it installs the latest GitHub Release ZIP through the WordPress Playground CORS proxy so the demo exercises the packaged release artifact without direct GitHub asset CORS failures.
+- `.wordpress-org/blueprints/blueprint.json` deploys to WordPress.org SVN as `assets/blueprints/blueprint.json` for the plugin-directory Preview button. WordPress.org installs the plugin automatically in that preview, so this blueprint does not install Borges itself.
 - Both files intentionally declare `phpExtensionBundles: ["kitchen-sink"]` and `features: { "networking": true, "intl": true }`. The bundle form follows WordPress.org Preview documentation; the `features.intl` flag is required by the live browser Playground runtime so formatter requests do not fall back with `bibliography_builder_formatter_extension_missing`.
 
 Run `npm run test -- --runTestsByPath src/blueprint.test.js` after editing either Blueprint.

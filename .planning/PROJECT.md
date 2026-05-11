@@ -6,19 +6,20 @@ Borges Bibliography Builder
 
 ## Summary
 
-WordPress block plugin that converts DOI, BibTeX, and progressively enhanced
-scholarly citation inputs into a semantically rich, static bibliography block
-backed by CSL-JSON.
+WordPress block plugin that converts DOI, PubMed/PMID, BibTeX, and progressively
+enhanced scholarly citation inputs into a semantically rich, static bibliography
+block backed by CSL-JSON.
 
 ## Source of truth
 
--   `/Users/danknauss/Developer/GitHub/wp-bibliography-block/SPEC.md`
+-   `SPEC.md`
 
 ## Current focus
 
--   Post-launch GSD Phase 2 (performance/stability remediation) is committed
-    (`3d5d3de`, `539b6b3`); next track is the post-Phase 2 feature backlog,
-    starting with frontend Cite/Export affordances
+-   Current public release baseline is `v1.3.3`; `main` is three commits ahead
+    with Playground E2E coverage and local hygiene
+-   Next feature track is the post-Phase 2 backlog, starting with frontend
+    Cite/Export affordances
 -   The hidden 51-entry formatter cliff is now replaced by an explicit, tested
     50-total-citation policy for 1.x
 -   Maintain CSL-JSON as the canonical citation model
