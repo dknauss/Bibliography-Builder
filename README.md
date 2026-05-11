@@ -53,6 +53,7 @@ Developer-facing CI/runtime coverage details are listed in the development secti
 
 ## Recent Release Highlights
 
+- **1.3.3** — Restores DOI imports in WordPress Playground with direct CrossRef CSL transform lookups, serializes DOI requests for CrossRef's public concurrency limit, and adds a PubMed sample to the demo starter content.
 - **1.3.0** — Enforces an explicit 50-citation cap with editor warnings, guards all editor mutation flows against stale async results, removes a redundant formatter call in the manual-entry path, prunes non-runtime vendor dead weight from the release zip, and caches successful PMID responses while deduplicating concurrent DOI requests.
 - **1.2.0** — Adds PubMed/PMID import through an authenticated REST proxy, BibLaTeX export, manual reordering for numeric styles, full-bibliography reformat parity, and compact matrix coverage across all nine styles.
 - **ABNT / NBR 6023:2018** — Brazilian bibliography output is available as ABNT (Associação Brasileira de Normas Técnicas) with `pt-BR` defaults and the `Referências` heading.

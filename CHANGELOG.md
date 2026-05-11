@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 No changes yet.
 
+## [1.3.3] - 2026-05-11
+
+### Fixed
+
+- Restore DOI imports in browser-based WordPress Playground by resolving DOI metadata through CrossRef's CORS-friendly CSL transform endpoint instead of relying on `doi.org` content negotiation redirects.
+- Keep DOI lookups serialized so pasted DOI batches respect CrossRef's public concurrency limit.
+
+### Changed
+
+- Add a PubMed/PMID sample (`PMID:26673779`) to the Playground starter content alongside DOI and BibTeX examples.
+
 ## [1.3.2] - 2026-05-10
 
 ### Added
